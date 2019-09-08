@@ -24,7 +24,7 @@ displayURL="https://www.curseforge.com/minecraft/mc-mods/item-lore-stats" #optio
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="itemlorestats.png" #optional
 # A text field displayed in the mod UI
-credits="" #optional
+credits="Supavitax" #optional
 # A text field displayed in the mod UI
 authors="snowstep115" #optional
 # The description text for the mod (multi line!) (#mandatory)
