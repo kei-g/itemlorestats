@@ -8,7 +8,7 @@ public final class LoreItemGroup extends ItemGroup {
     public static final LoreItemGroup INSTANCE = new LoreItemGroup();
 
     LoreItemGroup() {
-        super("lore");
+        super("itemlorestats");
     }
 
     @Override

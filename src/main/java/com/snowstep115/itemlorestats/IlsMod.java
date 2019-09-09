@@ -5,7 +5,7 @@ import java.io.StringWriter;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.snowstep115.itemlorestats.command.CreateLoreCommand;
-import com.snowstep115.itemlorestats.command.ItemLoreStatsCommand;
+import com.snowstep115.itemlorestats.command.IlsHelpCommand;
 import com.snowstep115.itemlorestats.lang.ThrowableRunnable;
 
 import org.apache.logging.log4j.LogManager;
@@ -21,10 +21,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-@Mod(ItemLoreStatsMod.MODID)
-public final class ItemLoreStatsMod {
-    public static ItemLoreStatsMod INSTANCE;
-    public static final Logger LOGGER = LogManager.getLogger(ItemLoreStatsMod.MODID);
+@Mod(IlsMod.MODID)
+public final class IlsMod {
+    public static IlsMod INSTANCE;
+    public static final Logger LOGGER = LogManager.getLogger(IlsMod.MODID);
     public static final String MODID = "itemlorestats";
 
     public static void execute(ThrowableRunnable task) {
@@ -36,14 +36,14 @@ public final class ItemLoreStatsMod {
     }
 
     public static void info(String format, Object... args) {
-        ItemLoreStatsMod.LOGGER.info(String.format(format, args));
+        IlsMod.LOGGER.info(String.format(format, args));
     }
 
     public static void printStackTrace(Throwable exception) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         exception.printStackTrace(pw);
-        ItemLoreStatsMod.info("%s", sw);
+        IlsMod.info(sw.toString());
     }
 
     private MinecraftServer server;
@@ -52,7 +52,7 @@ public final class ItemLoreStatsMod {
         return this.server == null;
     }
 
-    public ItemLoreStatsMod() {
+    public IlsMod() {
         INSTANCE = this;
         final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::clientSetup);
@@ -69,7 +69,7 @@ public final class ItemLoreStatsMod {
     private void serverStarting(final FMLServerStartingEvent event) {
         this.server = event.getServer();
         CommandDispatcher<CommandSource> disp = event.getCommandDispatcher();
-        ItemLoreStatsCommand.INSTANCE.register(disp);
         CreateLoreCommand.INSTANCE.register(disp);
+        IlsHelpCommand.INSTANCE.register(disp);
     }
 }

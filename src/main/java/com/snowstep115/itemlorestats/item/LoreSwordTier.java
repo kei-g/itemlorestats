@@ -5,8 +5,6 @@ import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 
 public final class LoreSwordTier implements IItemTier {
-    public static final LoreSwordTier INSTANCE = new LoreSwordTier();
-
     @Override
     public int getMaxUses() {
         return 32767;
