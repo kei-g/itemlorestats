@@ -8,16 +8,14 @@ import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.registries.ForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
 
 @EventBusSubscriber(bus = Bus.MOD)
 public final class ModEventHandler {
-    public static ForgeRegistry<Item> ITEM_REGISTRY;
-
     @SubscribeEvent
     public static void registerItems(final Register<Item> event) {
-        ITEM_REGISTRY = (ForgeRegistry<Item>) event.getRegistry();
-        LoreArmor.getAll(ITEM_REGISTRY::register);
-        LoreSword.getAll(ITEM_REGISTRY::register);
+        IForgeRegistry<Item> registry = event.getRegistry();
+        LoreArmor.getAll(registry::register);
+        LoreSword.getAll(registry::register);
     }
 }

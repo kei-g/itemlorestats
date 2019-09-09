@@ -13,6 +13,7 @@ import com.snowstep115.itemlorestats.item.LoreSword;
 import com.snowstep115.itemlorestats.item.LoreSwordTier;
 import com.snowstep115.itemlorestats.lang.ThrowableRunnable;
 import com.snowstep115.itemlorestats.lang.ThrowableSupplier;
+import com.snowstep115.itemlorestats.network.PacketHandler;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -81,6 +82,7 @@ public final class IlsMod {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        PacketHandler.init();
     }
 
     private void serverStarting(final FMLServerStartingEvent event) {

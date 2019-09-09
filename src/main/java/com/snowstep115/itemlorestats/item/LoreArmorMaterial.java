@@ -23,7 +23,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.registry.Registry;
 
 public final class LoreArmorMaterial implements IArmorMaterial {
-    private static final File FILE = new File("config", "armormaterial.json");
+    private static final File FILE = new File("config", "lorearmormaterial.json");
     private static final Map<String, LoreArmorMaterial> INSTANCES;
 
     static Map<String, LoreArmorMaterial> load() {
