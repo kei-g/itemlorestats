@@ -1,10 +1,10 @@
 package com.snowstep115.itemlorestats.item;
 
-import net.minecraft.item.ItemGroup;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 
-public final class LoreItemGroup extends ItemGroup {
+public final class LoreItemGroup extends CreativeTabs {
     public static final LoreItemGroup INSTANCE = new LoreItemGroup();
 
     LoreItemGroup() {
@@ -12,7 +12,7 @@ public final class LoreItemGroup extends ItemGroup {
     }
 
     @Override
-    public ItemStack createIcon() {
+    public ItemStack getTabIconItem() {
         return new ItemStack(Items.DIAMOND);
     }
 }

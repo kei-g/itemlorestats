@@ -8,14 +8,19 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.snowstep115.itemlorestats.IlsMod;
 
-import net.minecraft.item.SwordItem;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 
-public final class LoreSword extends SwordItem {
+public final class LoreSword extends ItemSword {
     private static final File FILE = new File("config", "loresword.json");
     private static int INDEX = 0;
     private static final Map<String, LoreSwordGson> INSTANCES;
@@ -65,14 +70,18 @@ public final class LoreSword extends SwordItem {
         });
     }
 
+    private final LoreSwordGson gson;
     private final String name;
 
     LoreSword(String name, LoreSwordGson gson) {
-        super(LoreSwordTier.getOrDefault(name), gson.attackDamage, gson.attackSpeed,
-                new Properties().maxDamage(gson.maxDamage).group(LoreItemGroup.INSTANCE));
+        super(LoreSwordTier.getOrDefault(name).getEnum());
+        this.gson = gson;
         this.name = name;
+        setCreativeTab(LoreItemGroup.INSTANCE);
+        setMaxDamage(gson.maxDamage);
         String identifier = String.format("loresword%d", LoreSword.INDEX++);
         setRegistryName(IlsMod.MODID, identifier);
+        setUnlocalizedName(IlsMod.MODID + "." + identifier);
     }
 
     public LoreSword(String name) {
@@ -80,13 +89,25 @@ public final class LoreSword extends SwordItem {
     }
 
     @Override
-    protected String getDefaultTranslationKey() {
+    public String getItemStackDisplayName(ItemStack itemstack) {
         return this.name;
     }
 
+    @Override
+    public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {
+        Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(equipmentSlot);
+        if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
+            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
+                    new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", this.gson.attackDamage, 0));
+            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
+                    new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", this.gson.attackSpeed, 0));
+        }
+        return multimap;
+    }
+
     public static class LoreSwordGson {
-        public int attackDamage = 10;
-        public float attackSpeed = 10.0f;
+        public double attackDamage = 10.0f;
+        public double attackSpeed = 10.0f;
         public int maxDamage = 32767;
     }
 }

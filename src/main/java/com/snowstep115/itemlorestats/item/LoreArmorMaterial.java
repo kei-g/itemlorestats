@@ -12,17 +12,14 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.snowstep115.itemlorestats.IlsMod;
 
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IArmorMaterial;
+import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraftforge.common.util.EnumHelper;
 
-public final class LoreArmorMaterial implements IArmorMaterial {
+public final class LoreArmorMaterial {
     private static final File FILE = new File("config", "lorearmormaterial.json");
     private static final Map<String, LoreArmorMaterial> INSTANCES;
 
@@ -49,7 +46,7 @@ public final class LoreArmorMaterial implements IArmorMaterial {
 
     public static LoreArmorMaterial getOrDefault(String name) {
         return LoreArmorMaterial.INSTANCES.compute(name,
-                ($, instance) -> instance == null ? new LoreArmorMaterial() : instance);
+                ($, instance) -> instance == null ? new LoreArmorMaterial($) : instance);
     }
 
     public static void save() {
@@ -65,50 +62,26 @@ public final class LoreArmorMaterial implements IArmorMaterial {
         });
     }
 
+    public String name;
+    public String textureName;
     public int durability = 32767;
-    public int damageReductionAmount = 10;
+    public int[] damageReductionAmounts = new int[] { 10, 10, 10, 10 };
     public int enchantability = 10;
     public String repairMaterial = Items.DIAMOND.getRegistryName().toString();
     public float toughness = 10.0f;
 
-    @Override
-    public int getDurability(EquipmentSlotType slotIn) {
-        return this.durability;
+    public LoreArmorMaterial() {
     }
 
-    @Override
-    public int getDamageReductionAmount(EquipmentSlotType slotIn) {
-        return this.damageReductionAmount;
+    public LoreArmorMaterial(String name) {
+        this.name = name;
+        this.textureName = name;
     }
 
-    @Override
-    public int getEnchantability() {
-        return this.enchantability;
-    }
-
-    @Override
-    public SoundEvent getSoundEvent() {
-        return SoundEvents.BLOCK_END_PORTAL_SPAWN;
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public Ingredient getRepairMaterial() {
-        int index = this.repairMaterial.indexOf(':');
-        String domain = index < 0 ? "minecraft" : this.repairMaterial.substring(0, index);
-        String path = index < 0 ? this.repairMaterial : this.repairMaterial.substring(index + 1);
-        ResourceLocation name = new ResourceLocation(domain, path);
-        Item item = Registry.ITEM.getOrDefault(name);
-        return Ingredient.fromItems(item);
-    }
-
-    @Override
-    public String getName() {
-        return "lore";
-    }
-
-    @Override
-    public float getToughness() {
-        return this.toughness;
+    public ArmorMaterial getEnum() {
+        ArmorMaterial material = EnumHelper.addArmorMaterial(this.name, this.textureName, this.durability,
+                this.damageReductionAmounts, this.enchantability, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, this.toughness);
+        material.setRepairItem(new ItemStack(Item.getByNameOrId(this.repairMaterial), 1));
+        return material;
     }
 }

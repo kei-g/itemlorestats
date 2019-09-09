@@ -4,36 +4,43 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.function.Supplier;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.snowstep115.itemlorestats.command.CreateLoreCommand;
-import com.snowstep115.itemlorestats.command.IlsHelpCommand;
 import com.snowstep115.itemlorestats.item.LoreArmor;
 import com.snowstep115.itemlorestats.item.LoreArmorMaterial;
 import com.snowstep115.itemlorestats.item.LoreSword;
 import com.snowstep115.itemlorestats.item.LoreSwordTier;
 import com.snowstep115.itemlorestats.lang.ThrowableRunnable;
 import com.snowstep115.itemlorestats.lang.ThrowableSupplier;
-import com.snowstep115.itemlorestats.network.PacketHandler;
+import com.snowstep115.itemlorestats.proxy.CommonProxy;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
-@Mod(IlsMod.MODID)
+@Mod(modid = IlsMod.MODID, name = IlsMod.NAME, version = IlsMod.VERSION)
 public final class IlsMod {
+    @Instance
     public static IlsMod INSTANCE;
+
+    public static final String CLIENT_PROXY = "com.snowstep115.itemlorestats.proxy.ClientProxy";
+    public static final String SERVER_PROXY = "com.snowstep115.itemlorestats.proxy.ServerProxy";
+
+    @SidedProxy(clientSide = CLIENT_PROXY, serverSide = SERVER_PROXY)
+    public static CommonProxy PROXY;
+
     public static final Logger LOGGER = LogManager.getLogger(IlsMod.MODID);
     public static final String MODID = "itemlorestats";
+    public static final String NAME = "Item Lore Stats";
+    public static final String VERSION = "HEAD";
 
     public static <T> T execute(ThrowableSupplier<T> task, Supplier<T> alternate) {
         try {
@@ -63,36 +70,28 @@ public final class IlsMod {
         IlsMod.info(sw.toString());
     }
 
-    private MinecraftServer server;
-
-    public boolean isServerAbsent() {
-        return this.server == null;
+    @EventHandler
+    public void preInit(final FMLPreInitializationEvent event) {
+        PROXY.preInit(event);
     }
 
-    public IlsMod() {
-        INSTANCE = this;
-        final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        bus.addListener(this::clientSetup);
-        bus.addListener(this::commonSetup);
-        MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
-        MinecraftForge.EVENT_BUS.addListener(this::serverStopping);
+    @EventHandler
+    public void init(final FMLInitializationEvent event) {
+        PROXY.init(event);
     }
 
-    private void clientSetup(final FMLClientSetupEvent event) {
+    @EventHandler
+    public void postInit(final FMLPostInitializationEvent event) {
+        PROXY.postInit(event);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
-        PacketHandler.init();
+    @EventHandler
+    public void serverStarting(final FMLServerStartingEvent event) {
+        event.registerServerCommand(new CreateLoreCommand());
     }
 
-    private void serverStarting(final FMLServerStartingEvent event) {
-        this.server = event.getServer();
-        CommandDispatcher<CommandSource> disp = event.getCommandDispatcher();
-        CreateLoreCommand.INSTANCE.register(disp);
-        IlsHelpCommand.INSTANCE.register(disp);
-    }
-
-    private void serverStopping(final FMLServerStoppingEvent event) {
+    @EventHandler
+    public void serverStopping(final FMLServerStoppingEvent event) {
         LoreArmor.save();
         LoreArmorMaterial.save();
         LoreSword.save();

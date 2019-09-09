@@ -14,12 +14,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.snowstep115.itemlorestats.IlsMod;
 
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
 
-public final class LoreArmor extends ArmorItem {
+public final class LoreArmor extends ItemArmor {
     private static final File FILE = new File("config", "lorearmor.json");
-    private static final HashMap<EquipmentSlotType, Integer> INDEX = new HashMap<>();
+    private static final HashMap<EntityEquipmentSlot, Integer> INDEX = new HashMap<>();
     private static final Map<String, LoreArmorGson> INSTANCES;
 
     static Map<String, LoreArmorGson> load() {
@@ -50,7 +51,7 @@ public final class LoreArmor extends ArmorItem {
         }
     }
 
-    public static LoreArmorGson getOrDefault(String name, EquipmentSlotType equipmentSlotType) {
+    public static LoreArmorGson getOrDefault(String name, EntityEquipmentSlot equipmentSlotType) {
         return LoreArmor.INSTANCES.compute(name,
                 ($, instance) -> instance == null ? new LoreArmorGson(equipmentSlotType) : instance);
     }
@@ -68,34 +69,36 @@ public final class LoreArmor extends ArmorItem {
         });
     }
 
-    protected final String name;
+    private final String name;
 
     LoreArmor(String name, LoreArmorGson gson) {
-        super(LoreArmorMaterial.getOrDefault(name), gson.equipmentSlotType,
-                new Properties().maxDamage(gson.maxDamage).group(LoreItemGroup.INSTANCE));
+        super(LoreArmorMaterial.getOrDefault(name).getEnum(), 0, gson.equipmentSlotType);
         this.name = name;
+        setCreativeTab(LoreItemGroup.INSTANCE);
+        setMaxDamage(gson.maxDamage);
         String identifier = String.format("lore%s%d", gson.equipmentSlotType.getName(),
                 LoreArmor.INDEX.compute(gson.equipmentSlotType, ($, index) -> index == null ? 0 : index + 1));
         setRegistryName(IlsMod.MODID, identifier);
+        setUnlocalizedName(IlsMod.MODID + "." + identifier);
     }
 
-    public LoreArmor(String name, EquipmentSlotType equipmentSlotType) {
+    public LoreArmor(String name, EntityEquipmentSlot equipmentSlotType) {
         this(name, LoreArmor.getOrDefault(name, equipmentSlotType));
     }
 
     @Override
-    protected String getDefaultTranslationKey() {
+    public String getItemStackDisplayName(ItemStack itemstack) {
         return this.name;
     }
 
     public static class LoreArmorGson {
-        public EquipmentSlotType equipmentSlotType = EquipmentSlotType.CHEST;
+        public EntityEquipmentSlot equipmentSlotType = EntityEquipmentSlot.CHEST;
         public int maxDamage = 32767;
 
         public LoreArmorGson() {
         }
 
-        public LoreArmorGson(EquipmentSlotType equipmentSlotType) {
+        public LoreArmorGson(EntityEquipmentSlot equipmentSlotType) {
             this.equipmentSlotType = equipmentSlotType;
         }
     }

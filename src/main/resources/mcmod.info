@@ -1,0 +1,16 @@
+[
+{
+  "modid": "itemlorestats",
+  "name": "Item Lore Stats",
+  "description": "Item Lore Stats.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["snowstep115"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
