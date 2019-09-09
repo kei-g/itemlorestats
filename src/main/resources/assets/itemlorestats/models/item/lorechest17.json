@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "itemlorestats:items/lorechestplate",
+        "layer1": "itemlorestats:items/lorechestplate_overlay"
+    }
+}

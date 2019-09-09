@@ -1,5 +1,8 @@
 package com.snowstep115.itemlorestats.eventhandler;
 
+import com.snowstep115.itemlorestats.item.LoreArmor;
+import com.snowstep115.itemlorestats.item.LoreSword;
+
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -14,5 +17,7 @@ public final class ModEventHandler {
     @SubscribeEvent
     public static void registerItems(final Register<Item> event) {
         ITEM_REGISTRY = (ForgeRegistry<Item>) event.getRegistry();
+        LoreArmor.getAll(ITEM_REGISTRY::register);
+        LoreSword.getAll(ITEM_REGISTRY::register);
     }
 }

@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "itemlorestats:items/lorehelmet",
+        "layer1": "itemlorestats:items/lorehelmet_overlay"
+    }
+}

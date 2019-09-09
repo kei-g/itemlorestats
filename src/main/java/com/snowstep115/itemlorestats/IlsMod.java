@@ -2,11 +2,17 @@ package com.snowstep115.itemlorestats;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.function.Supplier;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.snowstep115.itemlorestats.command.CreateLoreCommand;
 import com.snowstep115.itemlorestats.command.IlsHelpCommand;
+import com.snowstep115.itemlorestats.item.LoreArmor;
+import com.snowstep115.itemlorestats.item.LoreArmorMaterial;
+import com.snowstep115.itemlorestats.item.LoreSword;
+import com.snowstep115.itemlorestats.item.LoreSwordTier;
 import com.snowstep115.itemlorestats.lang.ThrowableRunnable;
+import com.snowstep115.itemlorestats.lang.ThrowableSupplier;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +25,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(IlsMod.MODID)
@@ -26,6 +33,15 @@ public final class IlsMod {
     public static IlsMod INSTANCE;
     public static final Logger LOGGER = LogManager.getLogger(IlsMod.MODID);
     public static final String MODID = "itemlorestats";
+
+    public static <T> T execute(ThrowableSupplier<T> task, Supplier<T> alternate) {
+        try {
+            return task.get();
+        } catch (Throwable exception) {
+            printStackTrace(exception);
+            return alternate.get();
+        }
+    }
 
     public static void execute(ThrowableRunnable task) {
         try {
@@ -58,6 +74,7 @@ public final class IlsMod {
         bus.addListener(this::clientSetup);
         bus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
+        MinecraftForge.EVENT_BUS.addListener(this::serverStopping);
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
@@ -71,5 +88,12 @@ public final class IlsMod {
         CommandDispatcher<CommandSource> disp = event.getCommandDispatcher();
         CreateLoreCommand.INSTANCE.register(disp);
         IlsHelpCommand.INSTANCE.register(disp);
+    }
+
+    private void serverStopping(final FMLServerStoppingEvent event) {
+        LoreArmor.save();
+        LoreArmorMaterial.save();
+        LoreSword.save();
+        LoreSwordTier.save();
     }
 }
