@@ -3,6 +3,7 @@ package com.snowstep115.itemlorestats.lore;
 import com.snowstep115.itemlorestats.IlsMod;
 import com.snowstep115.itemlorestats.event.WrappedLivingDamageEvent;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -38,7 +39,7 @@ public final class DodgeLore extends Lore {
 
     @Override
     public String getFormattedString() {
-        return String.format("§6Dodge§r %.2f%c", this.possibility, '%');
+        return String.format("§6%s§r %.2f%c", I18n.format("text.dodgelore.name"), this.possibility, '%');
     }
 
     @Override

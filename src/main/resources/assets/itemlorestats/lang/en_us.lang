@@ -1,1 +1,5 @@
 itemGroup.itemlorestats=Item Lore Stats
+
+text.armourlore.name=Armour
+text.damagelore.name=Damage
+text.dodgelore.name=Dodge

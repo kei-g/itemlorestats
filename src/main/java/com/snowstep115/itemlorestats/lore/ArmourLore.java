@@ -2,6 +2,7 @@ package com.snowstep115.itemlorestats.lore;
 
 import com.snowstep115.itemlorestats.IlsMod;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -37,8 +38,8 @@ public final class ArmourLore extends Lore {
     @Override
     public String getFormattedString() {
         if (0 < this.value)
-            return String.format("§6Armour§r +%.2f%c", this.value, '%');
-        return String.format("§6Armour§r %.2f%c", this.value, '%');
+            return String.format("§6%s§r +%.2f%c", I18n.format("text.armourlore.name"), this.value, '%');
+        return String.format("§6%s§r %.2f%c", I18n.format("text.armourlore.name"), this.value, '%');
     }
 
     @Override

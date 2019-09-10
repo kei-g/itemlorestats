@@ -2,6 +2,7 @@ package com.snowstep115.itemlorestats.lore;
 
 import com.snowstep115.itemlorestats.IlsMod;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
@@ -44,7 +45,8 @@ public final class DamageLore extends Lore {
 
     @Override
     public String getFormattedString() {
-        return String.format("§6Damage§r +%d-%d", this.minimumValue, this.maximumValue);
+        return String.format("§6%s§r +%d-%d", I18n.format("text.damagelore.name"), this.minimumValue,
+                this.maximumValue);
     }
 
     @Override
