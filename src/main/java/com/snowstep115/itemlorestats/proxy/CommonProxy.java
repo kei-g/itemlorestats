@@ -1,6 +1,7 @@
 package com.snowstep115.itemlorestats.proxy;
 
 import com.snowstep115.itemlorestats.IlsMod;
+import com.snowstep115.itemlorestats.event.WrappedLivingDamageEvent;
 import com.snowstep115.itemlorestats.lore.Lore;
 
 import net.minecraft.entity.Entity;
@@ -38,20 +39,27 @@ public abstract class CommonProxy {
         Entity source = event.getSource().getImmediateSource();
         IlsMod.info("damageevent: %s -> %s %f", source == null ? "null" : source.getName(),
                 living == null ? "null" : living.getName(), event.getAmount());
+        WrappedLivingDamageEvent wrapped = new WrappedLivingDamageEvent(event);
         if (source instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) source;
             ItemStack sword = player.getHeldItemMainhand();
-            Lore.deserialize(sword, lore -> lore.applyTo(event));
+            Lore.deserialize(sword, lore -> lore.applyTo(wrapped));
+            event.setAmount(wrapped.getAmount());
             IlsMod.info(source, "§dYou hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), event.getAmount());
         } else if (living instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) living;
             for (ItemStack itemstack : player.getEquipmentAndArmor()) {
                 Item item = itemstack.getItem();
                 if (item instanceof ItemArmor)
-                    Lore.deserialize(itemstack, lore -> lore.applyTo(event));
+                    Lore.deserialize(itemstack, lore -> lore.applyTo(wrapped));
             }
-            if (source != null)
-                IlsMod.info(living, "%s §dhit you for §6%.2f §ddamage.§r", source.getName(), event.getAmount());
+            event.setAmount(wrapped.getAmount());
+            if (source != null) {
+                if (wrapped.dodged.get())
+                    IlsMod.info(living, "%s §dhit you, but you dodged.§r", source.getName());
+                else
+                    IlsMod.info(living, "%s §dhit you for §6%.2f §ddamage.§r", source.getName(), event.getAmount());
+            }
         }
     }
 

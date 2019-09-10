@@ -1,5 +1,7 @@
 package com.snowstep115.itemlorestats.proxy;
 
+import java.util.List;
+
 import com.snowstep115.itemlorestats.lore.Lore;
 
 import net.minecraft.item.ItemStack;
@@ -31,6 +33,7 @@ public final class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public static void itemTooltipEvent(final ItemTooltipEvent event) {
         ItemStack itemstack = event.getItemStack();
-        Lore.deserialize(itemstack, lore -> event.getToolTip().add(lore.getFormattedString()));
+        List<String> tooltip = event.getToolTip();
+        Lore.deserialize(itemstack, lore -> tooltip.add(lore.getFormattedString()));
     }
 }

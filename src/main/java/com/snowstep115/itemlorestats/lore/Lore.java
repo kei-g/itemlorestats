@@ -8,12 +8,29 @@ import com.snowstep115.itemlorestats.IlsMod;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
 public abstract class Lore {
     private static final String KEY = "com.snowstep115.itemlorestats";
     private static final String NAMESPACE = KEY + ".lore";
+
+    public static Consumer<Lore> addDisplayLore(ItemStack itemstack) {
+        if (!itemstack.hasTagCompound())
+            itemstack.setTagCompound(new NBTTagCompound());
+        NBTTagCompound tag = itemstack.getTagCompound();
+        if (!tag.hasKey("display"))
+            tag.setTag("display", new NBTTagCompound());
+        NBTTagCompound display = tag.getCompoundTag("display");
+        if (!display.hasKey("Lore"))
+            display.setTag("Lore", new NBTTagList());
+        NBTTagList list = display.getTagList("Lore", NBT.TAG_STRING);
+        return lore -> {
+            NBTTagString str = new NBTTagString(lore.getFormattedString());
+            list.appendTag(str);
+        };
+    }
 
     @SuppressWarnings("unchecked")
     public static Lore deserializeFrom(NBTTagCompound tag) {
@@ -55,7 +72,8 @@ public abstract class Lore {
         if (!tag.hasKey(Lore.KEY))
             tag.setTag(Lore.KEY, new NBTTagList());
         NBTTagList list = tag.getTagList(Lore.KEY, NBT.TAG_COMPOUND);
-        list.appendTag(serializeNBT());
+        NBTTagCompound nbt = serializeNBT();
+        list.appendTag(nbt);
     }
 
     public abstract void applyTo(LivingDamageEvent event);
