@@ -1,10 +1,10 @@
 package com.snowstep115.itemlorestats.lore;
 
-import java.lang.reflect.Constructor;
 import java.util.function.Consumer;
 
 import com.snowstep115.itemlorestats.IlsMod;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -13,9 +13,6 @@ import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
 public abstract class Lore {
-    private static final String KEY = "com.snowstep115.itemlorestats";
-    private static final String NAMESPACE = KEY + ".lore";
-
     public static Consumer<Lore> addDisplayLore(ItemStack itemstack) {
         if (!itemstack.hasTagCompound())
             itemstack.setTagCompound(new NBTTagCompound());
@@ -26,26 +23,33 @@ public abstract class Lore {
         if (!display.hasKey("Lore"))
             display.setTag("Lore", new NBTTagList());
         NBTTagList list = display.getTagList("Lore", NBT.TAG_STRING);
-        return lore -> {
-            NBTTagString str = new NBTTagString(lore.getFormattedString());
-            list.appendTag(str);
-        };
+        return lore -> list.appendTag(new NBTTagString(lore.getFormattedString()));
     }
 
-    @SuppressWarnings("unchecked")
-    public static Lore deserializeFrom(NBTTagCompound tag) {
-        return IlsMod.execute(() -> {
-            String loreClass = NAMESPACE + "." + tag.getString("LoreClass");
-            Class<? extends Lore> clazz = (Class<? extends Lore>) Lore.class.getClassLoader().loadClass(loreClass);
-            Constructor<? extends Lore> ctor = clazz.getDeclaredConstructor(NBTTagCompound.class);
-            ctor.setAccessible(true);
-            return ctor.newInstance(tag);
-        }, () -> null);
+    public static Lore deserializeFrom(String description) {
+        String[] comps = description.split(" ");
+        if (comps.length < 2)
+            return null;
+        while (true) {
+            int index = comps[0].indexOf('§');
+            if (index < 0)
+                break;
+            comps[0] = comps[0].substring(0, index) + comps[0].substring(index + 2);
+        }
+        if (I18n.format("text.armourlore.name").equals(comps[0])) {
+            return new ArmourLore(comps[1]);
+        } else if (I18n.format("text.damagelore.name").equals(comps[0])) {
+            return new DamageLore(comps[1]);
+        } else if (I18n.format("text.dodgelore.name").equals(comps[0])) {
+            return new DodgeLore(comps[1]);
+        }
+        IlsMod.info("%s, not matched", description);
+        return null;
     }
 
     public static void deserialize(NBTTagList list, Consumer<Lore> consumer) {
         for (int i = 0; i < list.tagCount(); i++) {
-            NBTTagCompound loreTag = list.getCompoundTagAt(i);
+            String loreTag = list.getStringTagAt(i);
             Lore lore = Lore.deserializeFrom(loreTag);
             if (lore == null)
                 continue;
@@ -56,24 +60,18 @@ public abstract class Lore {
     public static void deserialize(NBTTagCompound tag, Consumer<Lore> consumer) {
         if (tag == null)
             return;
-        NBTTagList list = tag.getTagList(Lore.KEY, NBT.TAG_COMPOUND);
-        deserialize(list, consumer);
+        if (!tag.hasKey("display"))
+            return;
+        NBTTagCompound display = tag.getCompoundTag("display");
+        if (!display.hasKey("Lore"))
+            return;
+        NBTTagList lore = display.getTagList("Lore", NBT.TAG_STRING);
+        Lore.deserialize(lore, consumer);
     }
 
     public static void deserialize(ItemStack itemstack, Consumer<Lore> consumer) {
         NBTTagCompound tag = itemstack.getTagCompound();
-        deserialize(tag, consumer);
-    }
-
-    public void applyTo(ItemStack itemstack) {
-        if (!itemstack.hasTagCompound())
-            itemstack.setTagCompound(new NBTTagCompound());
-        NBTTagCompound tag = itemstack.getTagCompound();
-        if (!tag.hasKey(Lore.KEY))
-            tag.setTag(Lore.KEY, new NBTTagList());
-        NBTTagList list = tag.getTagList(Lore.KEY, NBT.TAG_COMPOUND);
-        NBTTagCompound nbt = serializeNBT();
-        list.appendTag(nbt);
+        Lore.deserialize(tag, consumer);
     }
 
     public abstract void applyTo(LivingDamageEvent event);
@@ -81,10 +79,4 @@ public abstract class Lore {
     public abstract boolean canApply(ItemStack itemstack);
 
     public abstract String getFormattedString();
-
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound tag = new NBTTagCompound();
-        tag.setString("LoreClass", getClass().getSimpleName());
-        return tag;
-    }
 }

@@ -6,7 +6,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
 public final class ArmourLore extends Lore {
@@ -16,8 +15,9 @@ public final class ArmourLore extends Lore {
         this.value = IlsMod.SEED.nextGaussian() * 50d;
     }
 
-    public ArmourLore(NBTTagCompound tag) {
-        this.value = tag.getDouble("value");
+    public ArmourLore(String value) {
+        int index = value.lastIndexOf('%');
+        this.value = Double.parseDouble(value.substring(0, index));
     }
 
     @Override
@@ -40,12 +40,5 @@ public final class ArmourLore extends Lore {
         if (0 < this.value)
             return String.format("§6%s§r +%.2f%c", I18n.format("text.armourlore.name"), this.value, '%');
         return String.format("§6%s§r %.2f%c", I18n.format("text.armourlore.name"), this.value, '%');
-    }
-
-    @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound tag = super.serializeNBT();
-        tag.setDouble("value", this.value);
-        return tag;
     }
 }

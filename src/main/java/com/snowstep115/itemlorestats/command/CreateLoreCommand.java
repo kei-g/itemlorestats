@@ -1,5 +1,7 @@
 package com.snowstep115.itemlorestats.command;
 
+import java.util.function.Consumer;
+
 import com.snowstep115.itemlorestats.lore.ArmourLore;
 import com.snowstep115.itemlorestats.lore.DamageLore;
 import com.snowstep115.itemlorestats.lore.DodgeLore;
@@ -27,9 +29,9 @@ public final class CreateLoreCommand extends CommandBase {
 
     private static void addLoreItem(EntityPlayerMP entity, Item item, Lore... lores) {
         ItemStack itemstack = new ItemStack(item);
+        Consumer<Lore> add = Lore.addDisplayLore(itemstack);
         for (Lore lore : lores)
-            lore.applyTo(itemstack);
-        Lore.deserialize(itemstack, Lore.addDisplayLore(itemstack));
+            add.accept(lore);
         entity.addItemStackToInventory(itemstack);
     }
 

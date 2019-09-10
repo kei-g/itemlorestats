@@ -8,7 +8,6 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
 public final class DamageLore extends Lore {
@@ -25,9 +24,10 @@ public final class DamageLore extends Lore {
         this.maximumValue = Math.max(d1, d2);
     }
 
-    public DamageLore(NBTTagCompound tag) {
-        this.minimumValue = tag.getInteger("min");
-        this.maximumValue = tag.getInteger("max");
+    public DamageLore(String value) {
+        String[] comps = value.split("-");
+        this.minimumValue = Integer.parseInt(comps[0]);
+        this.maximumValue = Integer.parseInt(comps[1]);
     }
 
     @Override
@@ -47,13 +47,5 @@ public final class DamageLore extends Lore {
     public String getFormattedString() {
         return String.format("§6%s§r +%d-%d", I18n.format("text.damagelore.name"), this.minimumValue,
                 this.maximumValue);
-    }
-
-    @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound tag = super.serializeNBT();
-        tag.setInteger("min", this.minimumValue);
-        tag.setInteger("max", this.maximumValue);
-        return tag;
     }
 }

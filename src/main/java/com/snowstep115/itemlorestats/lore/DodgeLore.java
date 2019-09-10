@@ -7,7 +7,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
 public final class DodgeLore extends Lore {
@@ -17,8 +16,9 @@ public final class DodgeLore extends Lore {
         this.possibility = 10d + IlsMod.SEED.nextGaussian() * 10d;
     }
 
-    public DodgeLore(NBTTagCompound tag) {
-        this.possibility = tag.getDouble("possibility");
+    public DodgeLore(String value) {
+        int index = value.lastIndexOf('%');
+        this.possibility = Double.parseDouble(value.substring(0, index));
     }
 
     @Override
@@ -40,12 +40,5 @@ public final class DodgeLore extends Lore {
     @Override
     public String getFormattedString() {
         return String.format("§6%s§r %.2f%c", I18n.format("text.dodgelore.name"), this.possibility, '%');
-    }
-
-    @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound tag = super.serializeNBT();
-        tag.setDouble("possibility", this.possibility);
-        return tag;
     }
 }
