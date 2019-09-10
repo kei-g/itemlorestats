@@ -2,13 +2,10 @@ package com.snowstep115.itemlorestats;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Random;
 import java.util.function.Supplier;
 
 import com.snowstep115.itemlorestats.command.CreateLoreCommand;
-import com.snowstep115.itemlorestats.item.LoreArmor;
-import com.snowstep115.itemlorestats.item.LoreArmorMaterial;
-import com.snowstep115.itemlorestats.item.LoreSword;
-import com.snowstep115.itemlorestats.item.LoreSwordTier;
 import com.snowstep115.itemlorestats.lang.ThrowableRunnable;
 import com.snowstep115.itemlorestats.lang.ThrowableSupplier;
 import com.snowstep115.itemlorestats.proxy.CommonProxy;
@@ -16,6 +13,9 @@ import com.snowstep115.itemlorestats.proxy.CommonProxy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -36,6 +36,8 @@ public final class IlsMod {
 
     @SidedProxy(clientSide = CLIENT_PROXY, serverSide = SERVER_PROXY)
     public static CommonProxy PROXY;
+
+    public static final Random SEED = new Random();
 
     public static final Logger LOGGER = LogManager.getLogger(IlsMod.MODID);
     public static final String MODID = "itemlorestats";
@@ -61,6 +63,14 @@ public final class IlsMod {
 
     public static void info(String format, Object... args) {
         IlsMod.LOGGER.info(String.format(format, args));
+    }
+
+    public static void info(Entity entity, String format, Object... args) {
+        if (entity instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) entity;
+            String message = String.format(format, args);
+            player.sendStatusMessage(new TextComponentString(message), false);
+        }
     }
 
     public static void printStackTrace(Throwable exception) {
@@ -92,9 +102,5 @@ public final class IlsMod {
 
     @EventHandler
     public void serverStopping(final FMLServerStoppingEvent event) {
-        LoreArmor.save();
-        LoreArmorMaterial.save();
-        LoreSword.save();
-        LoreSwordTier.save();
     }
 }

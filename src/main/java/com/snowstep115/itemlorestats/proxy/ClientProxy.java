@@ -1,11 +1,9 @@
 package com.snowstep115.itemlorestats.proxy;
 
-import com.snowstep115.itemlorestats.item.LoreArmor;
-import com.snowstep115.itemlorestats.item.LoreSword;
+import com.snowstep115.itemlorestats.lore.Lore;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -31,10 +29,8 @@ public final class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
-    public static void registerModelsEvent(final ModelRegistryEvent event) {
-        LoreArmor.getAll(armor -> ModelLoader.setCustomModelResourceLocation(armor, 0,
-                new ModelResourceLocation(armor.getRegistryName(), null)));
-        LoreSword.getAll(sword -> ModelLoader.setCustomModelResourceLocation(sword, 0,
-                new ModelResourceLocation(sword.getRegistryName(), null)));
+    public static void itemTooltipEvent(final ItemTooltipEvent event) {
+        ItemStack itemstack = event.getItemStack();
+        Lore.deserialize(itemstack, lore -> event.getToolTip().add(lore.getFormattedString()));
     }
 }

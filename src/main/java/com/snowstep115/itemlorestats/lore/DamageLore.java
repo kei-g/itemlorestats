@@ -1,0 +1,57 @@
+package com.snowstep115.itemlorestats.lore;
+
+import com.snowstep115.itemlorestats.IlsMod;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
+
+public final class DamageLore extends Lore {
+    public final int minimumValue;
+    public final int maximumValue;
+
+    public DamageLore() {
+        int d1, d2;
+        do {
+            d1 = (int) Math.round(IlsMod.SEED.nextGaussian() * 127d);
+            d2 = (int) Math.round(IlsMod.SEED.nextGaussian() * 127d);
+        } while (d1 < 0 || d2 < 0);
+        this.minimumValue = Math.min(d1, d2);
+        this.maximumValue = Math.max(d1, d2);
+    }
+
+    public DamageLore(NBTTagCompound tag) {
+        this.minimumValue = tag.getInteger("min");
+        this.maximumValue = tag.getInteger("max");
+    }
+
+    @Override
+    public void applyTo(LivingDamageEvent event) {
+        double damage = event.getAmount();
+        damage += this.minimumValue + IlsMod.SEED.nextDouble() * (this.maximumValue - this.minimumValue);
+        event.setAmount((float) damage);
+    }
+
+    @Override
+    public boolean canApply(ItemStack itemstack) {
+        Item item = itemstack.getItem();
+        return item instanceof ItemBow || item instanceof ItemSword || item instanceof ItemTool;
+    }
+
+    @Override
+    public String getFormattedString() {
+        return String.format("§6Damage§r +%d-%d", this.minimumValue, this.maximumValue);
+    }
+
+    @Override
+    public NBTTagCompound serializeNBT() {
+        NBTTagCompound tag = super.serializeNBT();
+        tag.setInteger("min", this.minimumValue);
+        tag.setInteger("max", this.maximumValue);
+        return tag;
+    }
+}
