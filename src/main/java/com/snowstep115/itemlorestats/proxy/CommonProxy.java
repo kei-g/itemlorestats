@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -73,6 +74,22 @@ public abstract class CommonProxy {
         IlsMod.info("dropsevent: %s, looting level: %d", living.getName(), event.getLootingLevel());
         for (EntityItem entity : event.getDrops())
             IlsMod.info("  -> %s", entity.getItem());
+    }
+
+    @SubscribeEvent
+    public static void livingHealEvent(final LivingHealEvent event) {
+        EntityLivingBase living = event.getEntityLiving();
+        if (living.world.isRemote)
+            return;
+        IlsMod.info("healevent: %s %f", living == null ? "null" : living.getName(), event.getAmount());
+        if (living instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) living;
+            Stats stats = new Stats();
+            for (ItemStack equip : player.getEquipmentAndArmor())
+                Lore.deserialize(equip, lore -> lore.applyTo(stats));
+            double heal = event.getAmount() * 20 / stats.health;
+            event.setAmount((float) heal);
+        }
     }
 
     @SubscribeEvent
