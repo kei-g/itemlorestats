@@ -70,7 +70,8 @@ public abstract class CommonProxy {
             if (stats.ignited.get()) {
                 living.setFire(3);
             }
-        } else if (living instanceof EntityPlayer) {
+        }
+        if (living instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) living;
             Stats stats = new Stats(player);
             Lore.deserialize(player, lore -> lore.applyTo(stats));
