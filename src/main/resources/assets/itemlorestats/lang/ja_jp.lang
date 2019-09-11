@@ -9,3 +9,5 @@ text.dodgelore.name=回避
 text.healthlore.name=体力増加
 text.health.name=体力
 text.healthregenlore.name=体力回復
+
+text.itemlorestats.base_critical_damage.name=基本クリティカルダメージ(%%)

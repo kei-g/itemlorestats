@@ -51,7 +51,7 @@ public abstract class CommonProxy {
                 Lore.deserialize(equip, lore -> lore.applyTo(stats));
             double damage = stats.damage;
             if (stats.critical.get())
-                damage += damage * stats.criticalDamage / 100;
+                damage = damage * stats.criticalDamage / 100;
             event.setAmount((float) damage);
             if (stats.critical.get())
                 IlsMod.info(source, "§dYou crit hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), event.getAmount());

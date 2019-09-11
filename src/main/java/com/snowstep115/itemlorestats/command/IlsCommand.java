@@ -3,6 +3,7 @@ package com.snowstep115.itemlorestats.command;
 import java.util.function.Consumer;
 
 import com.snowstep115.itemlorestats.IlsMod;
+import com.snowstep115.itemlorestats.config.IlsConfig;
 import com.snowstep115.itemlorestats.lore.ArmourLore;
 import com.snowstep115.itemlorestats.lore.BlockLore;
 import com.snowstep115.itemlorestats.lore.CritChanceLore;
@@ -67,7 +68,7 @@ public final class IlsCommand extends CommandBase {
             IlsMod.info(mp, "%s: %.2f%%", new DodgeLore().getStatsName(), stats.dodge);
             IlsMod.info(mp, "%s: %.2f%%", new BlockLore().getStatsName(), stats.block);
             IlsMod.info(mp, "%s: %.2f%%", new CritChanceLore().getStatsName(), stats.criticalChance);
-            IlsMod.info(mp, "%s: %.2f%%", new CritDamageLore().getStatsName(), stats.criticalDamage - 50);
+            IlsMod.info(mp, "%s: %.2f%%", new CritDamageLore().getStatsName(), stats.criticalDamage - IlsConfig.baseCriticalDamage);
             IlsMod.info(mp, "%s: %.2f/%.2f", new HealthLore().getStatsName(), mp.getHealth() * stats.health / 20,
                     stats.health);
             IlsMod.info(mp, "%s: %.2f%%", new HealthRegenLore().getStatsName(), stats.regeneration);

@@ -9,3 +9,5 @@ text.dodgelore.name=Dodge
 text.healthlore.name=Health
 text.health.name=Health
 text.healthregenlore.name=Health Regen
+
+text.itemlorestats.base_critical_damage.name=Base Crit Damage(%%)
