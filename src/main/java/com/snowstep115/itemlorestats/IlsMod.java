@@ -48,7 +48,7 @@ public final class IlsMod {
         try {
             return task.get();
         } catch (Throwable exception) {
-            IlsMod.info("%s", exception);
+            IlsMod.info("%s", exception.getLocalizedMessage());
             printStackTrace(exception);
             return alternate.get();
         }
@@ -58,7 +58,7 @@ public final class IlsMod {
         try {
             task.run();
         } catch (Throwable exception) {
-            IlsMod.info("%s", exception);
+            IlsMod.info("%s", exception.getLocalizedMessage());
             printStackTrace(exception);
         }
     }

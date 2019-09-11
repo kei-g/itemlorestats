@@ -15,7 +15,7 @@ import com.snowstep115.itemlorestats.lang.ThrowableFunction;
 public final class ResourceUtil {
     public static <T> T enumerateResources(String path, ThrowableFunction<BufferedReader, T> function) {
         return IlsMod.execute(() -> {
-            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            ClassLoader loader = IlsMod.class.getClassLoader();
             URL url = loader.getResource(path);
             String[] comps = url.getPath().split(":");
             String jarPath = comps[comps.length - 1].split("!")[0];
