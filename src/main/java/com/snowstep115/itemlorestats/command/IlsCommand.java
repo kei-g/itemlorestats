@@ -68,9 +68,10 @@ public final class IlsCommand extends CommandBase {
             IlsMod.info(mp, "%s: %.2f%%", new DodgeLore().getStatsName(), stats.dodge);
             IlsMod.info(mp, "%s: %.2f%%", new BlockLore().getStatsName(), stats.block);
             IlsMod.info(mp, "%s: %.2f%%", new CritChanceLore().getStatsName(), stats.criticalChance);
-            IlsMod.info(mp, "%s: %.2f%%", new CritDamageLore().getStatsName(), stats.criticalDamage - IlsConfig.baseCriticalDamage);
-            IlsMod.info(mp, "%s: %.2f/%.2f", new HealthLore().getStatsName(), mp.getHealth() * stats.health / 20,
-                    stats.health);
+            IlsMod.info(mp, "%s: %.2f%%", new CritDamageLore().getStatsName(),
+                    stats.criticalDamage - IlsConfig.baseCriticalDamage);
+            IlsMod.info(mp, "%s: %.2f/%.2f", new HealthLore().getStatsName(),
+                    mp.getHealth() * stats.health / mp.getMaxHealth(), stats.health);
             IlsMod.info(mp, "%s: %.2f%%", new HealthRegenLore().getStatsName(), stats.regeneration);
             break;
         }
