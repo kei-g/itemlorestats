@@ -9,6 +9,7 @@ text.dodgelore.name=回避
 text.healthlore.name=体力増加
 text.health.name=体力
 text.healthregenlore.name=体力回復
+text.ignitionlore.name=発火発動率
 text.lifesteallore.name=体力吸収発動率
 
 config.itemlorestats.base_critical_damage.name=クリティカル基礎ダメージ(%%)

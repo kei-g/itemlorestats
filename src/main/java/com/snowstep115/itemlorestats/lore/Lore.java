@@ -99,6 +99,9 @@ public abstract class Lore {
                     if ("text.healthregenlore.name".equals(key)) {
                         return new HealthRegenLore(comps[1]);
                     }
+                    if ("text.ignitionlore.name".equals(key)) {
+                        return new IgnitionLore(comps[1]);
+                    }
                     if ("text.lifesteallore.name".equals(key)) {
                         return new LifeStealLore(comps[1]);
                     }

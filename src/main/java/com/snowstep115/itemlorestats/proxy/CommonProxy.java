@@ -67,6 +67,9 @@ public abstract class CommonProxy {
                 health = health * player.getMaxHealth() / stats.health;
                 player.setHealth((float) health);
             }
+            if (stats.ignited.get()) {
+                living.setFire(3);
+            }
         } else if (living instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) living;
             Stats stats = new Stats(player);
