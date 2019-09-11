@@ -79,6 +79,10 @@ public abstract class CommonProxy {
                 Potion slow = Potion.getPotionById(2);
                 living.addPotionEffect(new PotionEffect(slow, 60, IlsConfig.slowLevel, true, true));
             }
+            if (stats.poisoned.get()) {
+                Potion poison = Potion.getPotionById(19);
+                living.addPotionEffect(new PotionEffect(poison, 60, IlsConfig.poisonLevel, true, true));
+            }
         }
         if (living instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) living;
@@ -117,6 +121,11 @@ public abstract class CommonProxy {
             if (stats.slown.get() && source instanceof EntityLivingBase) {
                 EntityLivingBase enemy = (EntityLivingBase) source;
                 enemy.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 60, IlsConfig.slowLevel, true, true));
+            }
+            if (stats.poisoned.get() && source instanceof EntityLivingBase) {
+                EntityLivingBase enemy = (EntityLivingBase) source;
+                enemy.addPotionEffect(
+                        new PotionEffect(Potion.getPotionById(19), 60, IlsConfig.poisonLevel, true, true));
             }
         }
     }

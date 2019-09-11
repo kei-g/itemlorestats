@@ -17,6 +17,7 @@ public final class Stats {
     public double health;
     public double ignition;
     public double lifeSteal;
+    public double poison;
     public double reduction;
     public double reflection;
     public double regeneration;
@@ -32,6 +33,7 @@ public final class Stats {
     public final Lazy<Boolean> dodged = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.dodge);
     public final Lazy<Boolean> ignited = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.ignition);
     public final Lazy<Boolean> lifeStolen = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.lifeSteal);
+    public final Lazy<Boolean> poisoned = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.poison);
     public final Lazy<Boolean> reflected = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.reflection);
     public final Lazy<Boolean> slown = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.slowness);
 }

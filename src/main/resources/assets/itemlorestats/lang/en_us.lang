@@ -14,8 +14,10 @@ text.lifesteallore.name=Life Steal
 text.reflectlore.name=Reflect
 text.speedlore.name=Speed
 text.slowlore.name=Slow
+text.poisonlore.name=Poison
 
 config.itemlorestats.base_critical_damage.name=Base Crit Damage(%%)
 config.itemlorestats.block_slow_level.name=Effective Slow Level on Block
 config.itemlorestats.life_steal.name=Life Steal(%%)
 config.itemlorestats.slow_level.name=Effective Slow Level
+config.itemlorestats.poison_level.name=Effective Poison Level

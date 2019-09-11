@@ -29,6 +29,10 @@ public class IlsConfig {
     @RangeInt(min = 1, max = 31)
     public static int slowLevel = 6;
 
+    @LangKey("config.itemlorestats.poison_level.name")
+    @RangeInt(min = 1, max = 31)
+    public static int poisonLevel = 3;
+
     @EventBusSubscriber
     static class ConfigSubscriber {
         @SubscribeEvent
