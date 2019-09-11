@@ -14,7 +14,7 @@ import com.snowstep115.itemlorestats.IlsMod;
 import com.snowstep115.itemlorestats.lang.ThrowableFunction;
 
 public final class ResourceUtil {
-    public static <T> T enumerateResources(String path, ThrowableFunction<BufferedReader, T> function) {
+    public static <T> T enumerateResources(String path, String ext, ThrowableFunction<BufferedReader, T> function) {
         return IlsMod.execute(() -> {
             ClassLoader loader = IlsMod.class.getClassLoader();
             URL url = loader.getResource(path);
@@ -28,9 +28,9 @@ public final class ResourceUtil {
                 while (entries.hasMoreElements()) {
                     JarEntry entry = entries.nextElement();
                     String name = entry.getName();
-                    if (name != null && name.startsWith(path)) {
+                    if (name != null && name.startsWith(path) && name.endsWith(ext)) {
                         InputStream is = loader.getResourceAsStream(name);
-                        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                        BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
                         try {
                             T result = function.apply(br);
                             if (result == null)

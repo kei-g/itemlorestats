@@ -59,7 +59,7 @@ public abstract class Lore {
     public static Lore parse(String description) {
         String[] comps = StringUtil.decompose(description);
         StringUtil.undecorate(comps);
-        return ResourceUtil.enumerateResources("assets/itemlorestats/lang", br -> {
+        return ResourceUtil.enumerateResources("assets/itemlorestats/lang/", ".lang", br -> {
             do {
                 String line = br.readLine();
                 if (line == null)
