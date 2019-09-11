@@ -21,7 +21,6 @@ public final class ResourceUtil {
             String[] comps = url.getPath().split(":");
             String jarPath = comps[comps.length - 1].split("!")[0];
             String decodedPath = URLDecoder.decode(jarPath, "UTF-8");
-            IlsMod.info("%s -> %s", jarPath, decodedPath);
             File file = new File(decodedPath);
             JarFile jarFile = new JarFile(file);
             try {
