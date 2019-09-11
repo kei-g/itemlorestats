@@ -34,9 +34,9 @@ public final class DamageLore extends Lore {
 
     @Override
     public void applyTo(Stats stats) {
-        double damage = stats.damage.get();
-        damage += this.minimumValue + IlsMod.SEED.nextDouble() * (this.maximumValue - this.minimumValue);
-        stats.damage.set(damage);
+        stats.damage += this.minimumValue + IlsMod.SEED.nextDouble() * (this.maximumValue - this.minimumValue);
+        stats.damageMax += this.maximumValue;
+        stats.damageMin += this.minimumValue;
     }
 
     @Override

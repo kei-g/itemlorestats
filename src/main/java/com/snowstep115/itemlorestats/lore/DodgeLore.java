@@ -24,9 +24,7 @@ public final class DodgeLore extends Lore {
 
     @Override
     public void applyTo(Stats stats) {
-        double dodge = stats.dodge.get();
-        dodge += this.possibility;
-        stats.dodge.set(dodge);
+        stats.dodge += this.possibility;
     }
 
     @Override

@@ -42,21 +42,22 @@ public abstract class CommonProxy {
             ItemStack sword = player.getHeldItemMainhand();
             Stats stats = new Stats();
             Lore.deserialize(sword, lore -> lore.applyTo(stats));
-            event.setAmount((float) stats.damage.get());
+            event.setAmount((float) stats.damage);
             IlsMod.info(source, "§dYou hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), event.getAmount());
         } else if (living instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) living;
             Stats stats = new Stats();
             for (ItemStack itemstack : player.getEquipmentAndArmor())
                 Lore.deserialize(itemstack, lore -> lore.applyTo(stats));
-            double reduction = Math.min(event.getAmount(), event.getAmount() * stats.reduction.get() / 100);
             if (source != null) {
-                if (IlsMod.SEED.nextDouble() * 100 <= stats.dodge.get()) {
+                if (IlsMod.SEED.nextDouble() * 100 <= stats.dodge) {
                     event.setAmount(0);
                     IlsMod.info(living, "%s §dhit you, but you dodged.§r", source.getName());
-                }
-                else {
-                    event.setAmount((float)(event.getAmount() - reduction));
+                } else {
+                    double damage = event.getAmount() - event.getAmount() * stats.reduction / 100;
+                    if (damage < 0)
+                        damage = 0;
+                    event.setAmount((float) damage);
                     IlsMod.info(living, "%s §dhit you for §6%.2f §ddamage.§r", source.getName(), event.getAmount());
                 }
             }

@@ -24,9 +24,7 @@ public final class ArmourLore extends Lore {
 
     @Override
     public void applyTo(Stats stats) {
-        double reduction = stats.reduction.get();
-        reduction += this.value;
-        stats.reduction.set(reduction);
+        stats.reduction += this.value;
     }
 
     @Override
