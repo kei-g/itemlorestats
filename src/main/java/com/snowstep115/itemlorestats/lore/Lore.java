@@ -81,6 +81,9 @@ public abstract class Lore {
                     if ("text.healthlore.name".equals(key)) {
                         return new HealthLore(comps[1]);
                     }
+                    if ("text.healthregenlore.name".equals(key)) {
+                        return new HealthRegenLore(comps[1]);
+                    }
                 }
             } while (true);
         });

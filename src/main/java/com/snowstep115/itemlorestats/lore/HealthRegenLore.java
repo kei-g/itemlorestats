@@ -2,16 +2,16 @@ package com.snowstep115.itemlorestats.lore;
 
 import com.snowstep115.itemlorestats.IlsMod;
 
-public final class ArmourLore extends Lore {
-    public final double value;
+public final class HealthRegenLore extends Lore {
+    private final double value;
 
-    public ArmourLore() {
-        super("text.armourlore.name");
-        this.value = IlsMod.SEED.nextGaussian() * 10d;
+    public HealthRegenLore() {
+        super("text.healthregenlore.name");
+        this.value = IlsMod.SEED.nextGaussian() * 5d;
     }
 
-    public ArmourLore(String value) {
-        super("text.armourlore.name");
+    public HealthRegenLore(String value) {
+        super("text.healthregenlore.name");
         int index = value.lastIndexOf('%');
         if (index < 0)
             throw new IllegalArgumentException();
@@ -20,7 +20,7 @@ public final class ArmourLore extends Lore {
 
     @Override
     public void applyTo(Stats stats) {
-        stats.reduction += this.value;
+        stats.regeneration += this.value;
     }
 
     @Override

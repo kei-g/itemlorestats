@@ -13,6 +13,8 @@ public final class DodgeLore extends Lore {
     public DodgeLore(String value) {
         super("text.dodgelore.name");
         int index = value.lastIndexOf('%');
+        if (index < 0)
+            throw new IllegalArgumentException();
         this.possibility = Double.parseDouble(value.substring(0, index));
     }
 

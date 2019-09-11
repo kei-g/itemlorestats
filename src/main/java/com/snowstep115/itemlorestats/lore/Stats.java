@@ -10,6 +10,7 @@ public final class Stats {
     public double dodge;
     public double health = 20;
     public double reduction;
+    public double regeneration;
 
     public final Lazy<Boolean> dodged = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.dodge);
 }

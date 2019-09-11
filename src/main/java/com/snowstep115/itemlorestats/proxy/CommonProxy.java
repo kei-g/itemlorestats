@@ -1,5 +1,8 @@
 package com.snowstep115.itemlorestats.proxy;
 
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.snowstep115.itemlorestats.IlsMod;
 import com.snowstep115.itemlorestats.lore.Lore;
 import com.snowstep115.itemlorestats.lore.Stats;
@@ -18,6 +21,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 @EventBusSubscriber
 public abstract class CommonProxy {
@@ -98,5 +102,26 @@ public abstract class CommonProxy {
         if (living.world.isRemote)
             return;
         IlsMod.info("hurtevent: %s %f", living == null ? "null" : living.getName(), event.getAmount());
+    }
+
+    public static final ConcurrentHashMap<UUID, Integer> TICKS = new ConcurrentHashMap<>();
+
+    @SubscribeEvent
+    public static void playerTickEvent(final PlayerTickEvent event) {
+        EntityPlayer player = event.player;
+        if (player == null || player.world.isRemote)
+            return;
+        int tick = TICKS.compute(player.getUniqueID(), ($, t) -> t == null ? 1 : t + 1);
+        if (tick % 20 == 0) {
+            Stats stats = new Stats();
+            for (ItemStack equip : player.getEquipmentAndArmor())
+                Lore.deserialize(equip, lore -> lore.applyTo(stats));
+            double health = player.getHealth() + stats.regeneration * player.getMaxHealth() / 100;
+            if (health < 0)
+                health = 0;
+            if (player.getMaxHealth() < health)
+                health = player.getMaxHealth();
+            player.setHealth((float) health);
+        }
     }
 }

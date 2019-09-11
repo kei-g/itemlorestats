@@ -5,3 +5,4 @@ text.damagelore.name=ダメージ増加
 text.dodgelore.name=回避
 text.healthlore.name=体力増加
 text.health.name=体力
+text.healthregenlore.name=体力回復
