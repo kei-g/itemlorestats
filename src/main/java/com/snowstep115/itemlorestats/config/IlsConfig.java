@@ -12,9 +12,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Config(modid = IlsMod.MODID, type = Config.Type.INSTANCE)
 public class IlsConfig {
-    @LangKey("text.itemlorestats.base_critical_damage.name")
+    @LangKey("config.itemlorestats.base_critical_damage.name")
     @RangeDouble(min = 0, max = 1000)
     public static double baseCriticalDamage = 150;
+
+    @LangKey("config.itemlorestats.life_steal.name")
+    @RangeDouble(min = 0, max = 100)
+    public static double lifeSteal = 15;
 
     @EventBusSubscriber
     static class ConfigSubscriber {

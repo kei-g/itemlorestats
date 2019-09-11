@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.snowstep115.itemlorestats.IlsMod;
+import com.snowstep115.itemlorestats.config.IlsConfig;
 import com.snowstep115.itemlorestats.lore.Lore;
 import com.snowstep115.itemlorestats.lore.Stats;
 
@@ -11,7 +12,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -46,7 +46,7 @@ public abstract class CommonProxy {
                 living == null ? "null" : living.getName(), event.getAmount());
         if (source instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) source;
-            Stats stats = new Stats();
+            Stats stats = new Stats(player);
             Lore.deserialize(player, lore -> lore.applyTo(stats));
             double damage = stats.damage;
             if (stats.critical.get())
@@ -57,9 +57,19 @@ public abstract class CommonProxy {
                         event.getAmount());
             else
                 IlsMod.info(source, "§dYou hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), event.getAmount());
+            if (stats.lifeStolen.get()) {
+                double stolen = damage * IlsConfig.lifeSteal / 100;
+                IlsMod.info(source, "§dYou stole §6%.2f §dhealth.§r", stolen);
+                double health = stats.health * player.getHealth() / player.getMaxHealth();
+                health += stolen;
+                if (stats.health <= health)
+                    health = stats.health;
+                health = health * player.getMaxHealth() / stats.health;
+                player.setHealth((float) health);
+            }
         } else if (living instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) living;
-            Stats stats = new Stats();
+            Stats stats = new Stats(player);
             Lore.deserialize(player, lore -> lore.applyTo(stats));
             double damage = event.getAmount() - event.getAmount() * stats.reduction / 100;
             if (damage < 0)
@@ -101,9 +111,8 @@ public abstract class CommonProxy {
         IlsMod.info("healevent: %s %f", living == null ? "null" : living.getName(), event.getAmount());
         if (living instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) living;
-            Stats stats = new Stats();
-            for (ItemStack equip : player.getEquipmentAndArmor())
-                Lore.deserialize(equip, lore -> lore.applyTo(stats));
+            Stats stats = new Stats(player);
+            Lore.deserialize(player, lore -> lore.applyTo(stats));
             double heal = event.getAmount() * 20 / stats.health;
             event.setAmount((float) heal);
         }
@@ -126,9 +135,8 @@ public abstract class CommonProxy {
             return;
         int tick = TICKS.compute(player.getUniqueID(), ($, t) -> t == null ? 1 : t + 1);
         if (tick % 20 == 0) {
-            Stats stats = new Stats();
-            for (ItemStack equip : player.getEquipmentAndArmor())
-                Lore.deserialize(equip, lore -> lore.applyTo(stats));
+            Stats stats = new Stats(player);
+            Lore.deserialize(player, lore -> lore.applyTo(stats));
             double health = player.getHealth() + stats.regeneration * player.getMaxHealth() / 100;
             if (health < 0)
                 health = 0;

@@ -12,6 +12,7 @@ import com.snowstep115.itemlorestats.lore.DamageLore;
 import com.snowstep115.itemlorestats.lore.DodgeLore;
 import com.snowstep115.itemlorestats.lore.HealthLore;
 import com.snowstep115.itemlorestats.lore.HealthRegenLore;
+import com.snowstep115.itemlorestats.lore.LifeStealLore;
 import com.snowstep115.itemlorestats.lore.Lore;
 import com.snowstep115.itemlorestats.lore.Stats;
 
@@ -49,7 +50,8 @@ public final class IlsCommand extends CommandBase {
         String subcommand = args[0];
         switch (subcommand) {
         case "createlore":
-            addLoreItem(mp, Items.IRON_SWORD, new DamageLore(), new CritChanceLore(), new CritDamageLore());
+            addLoreItem(mp, Items.IRON_SWORD, new DamageLore(), new CritChanceLore(), new CritDamageLore(),
+                    new LifeStealLore());
             addLoreItem(mp, Items.LEATHER_HELMET, new ArmourLore(), new BlockLore(), new DodgeLore(), new HealthLore(),
                     new HealthRegenLore());
             addLoreItem(mp, Items.LEATHER_CHESTPLATE, new ArmourLore(), new BlockLore(), new DodgeLore(),
@@ -60,7 +62,7 @@ public final class IlsCommand extends CommandBase {
                     new HealthRegenLore());
             break;
         case "stats":
-            Stats stats = new Stats();
+            Stats stats = new Stats(mp);
             for (ItemStack equip : mp.getEquipmentAndArmor())
                 Lore.deserialize(equip, lore -> lore.applyTo(stats));
             IlsMod.info(mp, "%s: %.2f-%.2f", new DamageLore().getStatsName(), stats.damageMin, stats.damageMax);
@@ -73,6 +75,7 @@ public final class IlsCommand extends CommandBase {
             IlsMod.info(mp, "%s: %.2f/%.2f", new HealthLore().getStatsName(),
                     mp.getHealth() * stats.health / mp.getMaxHealth(), stats.health);
             IlsMod.info(mp, "%s: %.2f%%", new HealthRegenLore().getStatsName(), stats.regeneration);
+            IlsMod.info(mp, "%s: %.2f%%", new LifeStealLore().getStatsName(), stats.lifeSteal);
             break;
         }
     }
