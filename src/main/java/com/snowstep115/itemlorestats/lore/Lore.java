@@ -2,9 +2,9 @@ package com.snowstep115.itemlorestats.lore;
 
 import java.util.function.Consumer;
 
-import com.snowstep115.itemlorestats.IlsMod;
+import com.snowstep115.itemlorestats.util.ResourceUtil;
+import com.snowstep115.itemlorestats.util.StringUtil;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -26,31 +26,10 @@ public abstract class Lore {
         return lore -> list.appendTag(new NBTTagString(lore.getFormattedString()));
     }
 
-    public static Lore deserializeFrom(String description) {
-        String[] comps = description.split(" ");
-        if (comps.length < 2)
-            return null;
-        while (true) {
-            int index = comps[0].indexOf('§');
-            if (index < 0)
-                break;
-            comps[0] = comps[0].substring(0, index) + comps[0].substring(index + 2);
-        }
-        if (I18n.format("text.armourlore.name").equals(comps[0])) {
-            return new ArmourLore(comps[1]);
-        } else if (I18n.format("text.damagelore.name").equals(comps[0])) {
-            return new DamageLore(comps[1]);
-        } else if (I18n.format("text.dodgelore.name").equals(comps[0])) {
-            return new DodgeLore(comps[1]);
-        }
-        IlsMod.info("%s, not matched", description);
-        return null;
-    }
-
     public static void deserialize(NBTTagList list, Consumer<Lore> consumer) {
         for (int i = 0; i < list.tagCount(); i++) {
-            String loreTag = list.getStringTagAt(i);
-            Lore lore = Lore.deserializeFrom(loreTag);
+            String description = list.getStringTagAt(i);
+            Lore lore = Lore.parse(description);
             if (lore == null)
                 continue;
             consumer.accept(lore);
@@ -72,6 +51,36 @@ public abstract class Lore {
     public static void deserialize(ItemStack itemstack, Consumer<Lore> consumer) {
         NBTTagCompound tag = itemstack.getTagCompound();
         Lore.deserialize(tag, consumer);
+    }
+
+    public static Lore parse(String description) {
+        String[] comps = StringUtil.decompose(description);
+        StringUtil.undecorate(comps);
+        return ResourceUtil.enumerateResources("assets/itemlorestats/lang", br -> {
+            do {
+                String line = br.readLine();
+                if (line == null)
+                    return null;
+                if (line.isEmpty())
+                    continue;
+                int index = line.indexOf('=');
+                if (index < 0)
+                    continue;
+                String key = line.substring(0, index);
+                String value = line.substring(index + 1);
+                if (value.equals(comps[0])) {
+                    if ("text.armourlore.name".equals(key)) {
+                        return new ArmourLore(comps[1]);
+                    }
+                    if ("text.damagelore.name".equals(key)) {
+                        return new DamageLore(comps[1]);
+                    }
+                    if ("text.dodgelore.name".equals(key)) {
+                        return new DodgeLore(comps[1]);
+                    }
+                }
+            } while (true);
+        });
     }
 
     public abstract void applyTo(LivingDamageEvent event);
