@@ -7,7 +7,6 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.snowstep115.itemlorestats.IlsMod;
 import com.snowstep115.itemlorestats.config.IlsConfig;
-import com.snowstep115.itemlorestats.lore.Lore;
 import com.snowstep115.itemlorestats.lore.Stats;
 
 import net.minecraft.entity.Entity;
@@ -52,7 +51,6 @@ public abstract class CommonProxy {
         if (source instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) source;
             Stats stats = new Stats(player);
-            Lore.deserialize(player, lore -> lore.applyTo(stats));
             double damage = stats.damage;
             if (stats.critical.get())
                 damage = damage * stats.criticalDamage / 100;
@@ -87,7 +85,6 @@ public abstract class CommonProxy {
         if (living instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) living;
             Stats stats = new Stats(player);
-            Lore.deserialize(player, lore -> lore.applyTo(stats));
             double damage = event.getAmount() - event.getAmount() * stats.reduction / 100;
             if (damage < 0)
                 damage = 0;
@@ -147,7 +144,6 @@ public abstract class CommonProxy {
             return;
         IlsMod.info("equipmentchangeevent: %s %s -> %s", living.getName(), event.getFrom(), event.getTo());
         Stats stats = new Stats(living);
-        Lore.deserialize(living, lore -> lore.applyTo(stats));
         AbstractAttributeMap attr = living.getAttributeMap();
         Multimap<String, AttributeModifier> modifiers = ArrayListMultimap.create();
         modifiers.put("generic.movementSpeed",
@@ -165,7 +161,6 @@ public abstract class CommonProxy {
         if (living instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) living;
             Stats stats = new Stats(player);
-            Lore.deserialize(player, lore -> lore.applyTo(stats));
             double heal = event.getAmount() * player.getMaxHealth() / stats.health;
             event.setAmount((float) heal);
         }
@@ -189,7 +184,6 @@ public abstract class CommonProxy {
         int tick = TICKS.compute(player.getUniqueID(), ($, t) -> t == null ? 1 : t + 1);
         if (tick % 20 == 0) {
             Stats stats = new Stats(player);
-            Lore.deserialize(player, lore -> lore.applyTo(stats));
             double health = player.getHealth() + stats.regeneration * player.getMaxHealth() / 100;
             if (health < 0)
                 health = 0;

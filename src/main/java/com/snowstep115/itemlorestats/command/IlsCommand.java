@@ -68,8 +68,6 @@ public final class IlsCommand extends CommandBase {
             break;
         case "stats":
             Stats stats = new Stats(mp);
-            for (ItemStack equip : mp.getEquipmentAndArmor())
-                Lore.deserialize(equip, lore -> lore.applyTo(stats));
             IlsMod.info(mp, "%s: %.2f-%.2f", new DamageLore().getStatsName(), stats.damageMin, stats.damageMax);
             IlsMod.info(mp, "%s: %.2f%%", new ArmourLore().getStatsName(), stats.reduction);
             IlsMod.info(mp, "%s: %.2f%%", new DodgeLore().getStatsName(), stats.dodge);

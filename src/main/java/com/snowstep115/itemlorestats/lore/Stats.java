@@ -26,6 +26,7 @@ public final class Stats {
 
     public Stats(EntityLivingBase living) {
         this.health = living.getMaxHealth();
+        Lore.deserialize(living, lore -> lore.applyTo(this));
     }
 
     public final Lazy<Boolean> critical = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.criticalChance);
