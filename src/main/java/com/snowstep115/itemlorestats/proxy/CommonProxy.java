@@ -57,7 +57,7 @@ public abstract class CommonProxy {
                         event.getAmount());
             else
                 IlsMod.info(source, "§dYou hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), event.getAmount());
-            if (stats.lifeStolen.get()) {
+            if (stats.lifeStolen.get() && !(living instanceof EntityPlayer)) {
                 double stolen = damage * IlsConfig.lifeSteal / 100;
                 IlsMod.info(source, "§dYou stole §6%.2f §dhealth.§r", stolen);
                 double health = stats.health * player.getHealth() / player.getMaxHealth();
@@ -83,7 +83,7 @@ public abstract class CommonProxy {
             if (stats.blocked.get())
                 damage = 0;
             if (source != null) {
-                if (stats.dodged.get())
+                if (stats.dodged.get() && !(source instanceof EntityPlayer))
                     IlsMod.info(living, "%s §dhit you, but you dodged.§r", source.getName());
                 else if (stats.blocked.get()) {
                     Potion potion = Potion.getPotionById(2);
