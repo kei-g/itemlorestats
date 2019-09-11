@@ -97,6 +97,8 @@ public abstract class Lore {
                     return new IgnitionLore(comps[1]);
                 case "text.lifesteallore.name":
                     return new LifeStealLore(comps[1]);
+                case "text.reflectlore.name":
+                    return new ReflectLore(comps[1]);
                 case "text.speedlore.name":
                     return new SpeedLore(comps[1]);
                 }

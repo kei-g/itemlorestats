@@ -88,14 +88,25 @@ public abstract class CommonProxy {
             if (stats.blocked.get())
                 damage = 0;
             if (source != null) {
-                if (stats.dodged.get() && !(source instanceof EntityPlayer))
+                if (stats.reflected.get()) {
+                    IlsMod.info(living, "%s §dhit you, but you reflected.§r", source.getName());
+                } else if (stats.dodged.get() && !(source instanceof EntityPlayer)) {
                     IlsMod.info(living, "%s §dhit you, but you dodged.§r", source.getName());
-                else if (stats.blocked.get()) {
+                } else if (stats.blocked.get()) {
                     Potion potion = Potion.getPotionById(2);
                     player.addPotionEffect(new PotionEffect(potion, 30, 6, true, true));
                     IlsMod.info(living, "%s §dhit you, but you blocked.§r", source.getName());
                 } else
                     IlsMod.info(living, "%s §dhit you for §6%.2f §ddamage.§r", source.getName(), damage);
+            }
+            if (source instanceof EntityLivingBase && stats.reflected.get()) {
+                EntityLivingBase enemy = (EntityLivingBase) source;
+                double health = enemy.getHealth();
+                health -= damage;
+                if (health < 0)
+                    health = 0;
+                enemy.setHealth((float) health);
+                damage = 0;
             }
             damage = damage * player.getMaxHealth() / stats.health;
             event.setAmount((float) damage);

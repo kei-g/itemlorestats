@@ -11,6 +11,7 @@ text.health.name=生命值
 text.healthregenlore.name=生命回复
 text.ignitionlore.name=火焰攻击
 text.lifesteallore.name=生命窃取
+text.reflectlore.name=荆棘
 text.speedlore.name=移动速度
 
 config.itemlorestats.base_critical_damage.name=Base Crit Damage(%%)
