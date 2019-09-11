@@ -18,7 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 
-public final class CreateLoreCommand extends CommandBase {
+public final class IlsCommand extends CommandBase {
     @Override
     public String getName() {
         return "ils";
@@ -59,7 +59,7 @@ public final class CreateLoreCommand extends CommandBase {
                 if (min.containsKey(name))
                     IlsMod.info(mp, "%s: %.2f-%.2f", name, min.get(name), maxValue);
                 else
-                    IlsMod.info(mp, "%s: %.2f", name, maxValue);
+                    IlsMod.info(mp, "%s: %.2f%%", name, maxValue);
             }
             break;
         }

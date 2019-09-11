@@ -3,7 +3,6 @@ package com.snowstep115.itemlorestats.lore;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import com.snowstep115.itemlorestats.IlsMod;
 import com.snowstep115.itemlorestats.util.I18n;
 import com.snowstep115.itemlorestats.util.ResourceUtil;
 import com.snowstep115.itemlorestats.util.StringUtil;
@@ -13,7 +12,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.common.util.Constants.NBT;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
 public abstract class Lore {
     public static Consumer<Lore> addDisplayLore(ItemStack itemstack) {
@@ -92,16 +90,14 @@ public abstract class Lore {
         this.unlocalizedName = String.format("§6%s§r", name);
     }
 
-    public abstract void applyTo(LivingDamageEvent event);
+    public abstract void applyTo(Stats stats);
 
     public abstract boolean canApply(ItemStack itemstack);
 
     public abstract String getFormattedString();
 
     public String getLocalizedName() {
-        String localizedName = I18n.format(this.unlocalizedName);
-        IlsMod.info("getLocalizedName: %s -> %s", this.unlocalizedName, localizedName);
-        return localizedName;
+        return I18n.format(this.unlocalizedName);
     }
 
     public String getUnlocalizedName() {

@@ -5,7 +5,7 @@ import java.io.StringWriter;
 import java.util.Random;
 import java.util.function.Supplier;
 
-import com.snowstep115.itemlorestats.command.CreateLoreCommand;
+import com.snowstep115.itemlorestats.command.IlsCommand;
 import com.snowstep115.itemlorestats.lang.ThrowableRunnable;
 import com.snowstep115.itemlorestats.lang.ThrowableSupplier;
 import com.snowstep115.itemlorestats.proxy.CommonProxy;
@@ -99,7 +99,7 @@ public final class IlsMod {
 
     @EventHandler
     public void serverStarting(final FMLServerStartingEvent event) {
-        event.registerServerCommand(new CreateLoreCommand());
+        event.registerServerCommand(new IlsCommand());
     }
 
     @EventHandler

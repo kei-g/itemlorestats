@@ -9,7 +9,6 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
 public final class DamageLore extends Lore {
     public final int minimumValue;
@@ -34,10 +33,10 @@ public final class DamageLore extends Lore {
     }
 
     @Override
-    public void applyTo(LivingDamageEvent event) {
-        double damage = event.getAmount();
+    public void applyTo(Stats stats) {
+        double damage = stats.damage.get();
         damage += this.minimumValue + IlsMod.SEED.nextDouble() * (this.maximumValue - this.minimumValue);
-        event.setAmount((float) damage);
+        stats.damage.set(damage);
     }
 
     @Override

@@ -7,7 +7,6 @@ import com.snowstep115.itemlorestats.IlsMod;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
 public final class ArmourLore extends Lore {
     public final double value;
@@ -24,12 +23,10 @@ public final class ArmourLore extends Lore {
     }
 
     @Override
-    public void applyTo(LivingDamageEvent event) {
-        double damage = event.getAmount();
-        damage -= damage * this.value / 100;
-        if (damage < 0)
-            damage = 0;
-        event.setAmount((float) damage);
+    public void applyTo(Stats stats) {
+        double reduction = stats.reduction.get();
+        reduction += this.value;
+        stats.reduction.set(reduction);
     }
 
     @Override
@@ -41,8 +38,8 @@ public final class ArmourLore extends Lore {
     @Override
     public String getFormattedString() {
         if (0 < this.value)
-            return String.format("%s +%.2f%c", getLocalizedName(), this.value, '%');
-        return String.format("%s %.2f%c", getLocalizedName(), this.value, '%');
+            return String.format("%s +%.2f%%", getLocalizedName(), this.value);
+        return String.format("%s %.2f%%", getLocalizedName(), this.value);
     }
 
     @Override

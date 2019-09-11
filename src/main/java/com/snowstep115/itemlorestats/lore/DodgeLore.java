@@ -3,12 +3,10 @@ package com.snowstep115.itemlorestats.lore;
 import java.util.Map;
 
 import com.snowstep115.itemlorestats.IlsMod;
-import com.snowstep115.itemlorestats.event.WrappedLivingDamageEvent;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
 public final class DodgeLore extends Lore {
     public double possibility;
@@ -25,13 +23,10 @@ public final class DodgeLore extends Lore {
     }
 
     @Override
-    public void applyTo(LivingDamageEvent event) {
-        if (event instanceof WrappedLivingDamageEvent) {
-            WrappedLivingDamageEvent wrapped = (WrappedLivingDamageEvent) event;
-            if (IlsMod.SEED.nextDouble() * 100 <= this.possibility)
-                wrapped.dodged.set(true);
-            event.setAmount(0);
-        }
+    public void applyTo(Stats stats) {
+        double dodge = stats.dodge.get();
+        dodge += this.possibility;
+        stats.dodge.set(dodge);
     }
 
     @Override
@@ -42,7 +37,7 @@ public final class DodgeLore extends Lore {
 
     @Override
     public String getFormattedString() {
-        return String.format("%s %.2f%c", getLocalizedName(), this.possibility, '%');
+        return String.format("%s %.2f%%", getLocalizedName(), this.possibility);
     }
 
     @Override
