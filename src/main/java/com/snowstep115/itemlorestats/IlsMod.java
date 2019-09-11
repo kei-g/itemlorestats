@@ -79,7 +79,7 @@ public final class IlsMod {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         exception.printStackTrace(pw);
-        IlsMod.info(sw.toString());
+        IlsMod.info("%s", sw.toString());
     }
 
     @EventHandler
