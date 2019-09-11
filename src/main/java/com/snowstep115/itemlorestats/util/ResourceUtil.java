@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -19,10 +20,9 @@ public final class ResourceUtil {
             URL url = loader.getResource(path);
             String[] comps = url.getPath().split(":");
             String jarPath = comps[comps.length - 1].split("!")[0];
-            byte[] buf = jarPath.getBytes();
-            String gb2312Path = new String(buf, "GB2312");
-            IlsMod.info("%s", gb2312Path);
-            File file = new File(gb2312Path);
+            String decodedPath = URLDecoder.decode(jarPath, "UTF-8");
+            IlsMod.info("%s -> %s", jarPath, decodedPath);
+            File file = new File(decodedPath);
             JarFile jarFile = new JarFile(file);
             try {
                 Enumeration<JarEntry> entries = jarFile.entries();
