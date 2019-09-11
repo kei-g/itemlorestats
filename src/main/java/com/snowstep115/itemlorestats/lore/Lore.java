@@ -1,7 +1,10 @@
 package com.snowstep115.itemlorestats.lore;
 
+import java.util.Map;
 import java.util.function.Consumer;
 
+import com.snowstep115.itemlorestats.IlsMod;
+import com.snowstep115.itemlorestats.util.I18n;
 import com.snowstep115.itemlorestats.util.ResourceUtil;
 import com.snowstep115.itemlorestats.util.StringUtil;
 
@@ -83,9 +86,27 @@ public abstract class Lore {
         });
     }
 
+    protected final String unlocalizedName;
+
+    protected Lore(String name) {
+        this.unlocalizedName = String.format("§6%s§r", name);
+    }
+
     public abstract void applyTo(LivingDamageEvent event);
 
     public abstract boolean canApply(ItemStack itemstack);
 
     public abstract String getFormattedString();
+
+    public String getLocalizedName() {
+        String localizedName = I18n.format(this.unlocalizedName);
+        IlsMod.info("getLocalizedName: %s -> %s", this.unlocalizedName, localizedName);
+        return localizedName;
+    }
+
+    public String getUnlocalizedName() {
+        return this.unlocalizedName;
+    }
+
+    public abstract void makeStatistics(Map<String, Double> min, Map<String, Double> max);
 }

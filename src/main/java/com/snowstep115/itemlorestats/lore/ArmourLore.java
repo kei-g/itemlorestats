@@ -1,8 +1,9 @@
 package com.snowstep115.itemlorestats.lore;
 
+import java.util.Map;
+
 import com.snowstep115.itemlorestats.IlsMod;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -12,10 +13,12 @@ public final class ArmourLore extends Lore {
     public final double value;
 
     public ArmourLore() {
+        super("text.armourlore.name");
         this.value = IlsMod.SEED.nextGaussian() * 50d;
     }
 
     public ArmourLore(String value) {
+        super("text.armourlore.name");
         int index = value.lastIndexOf('%');
         this.value = Double.parseDouble(value.substring(0, index));
     }
@@ -38,7 +41,12 @@ public final class ArmourLore extends Lore {
     @Override
     public String getFormattedString() {
         if (0 < this.value)
-            return String.format("§6%s§r +%.2f%c", I18n.format("text.armourlore.name"), this.value, '%');
-        return String.format("§6%s§r %.2f%c", I18n.format("text.armourlore.name"), this.value, '%');
+            return String.format("%s +%.2f%c", getLocalizedName(), this.value, '%');
+        return String.format("%s %.2f%c", getLocalizedName(), this.value, '%');
+    }
+
+    @Override
+    public void makeStatistics(Map<String, Double> min, Map<String, Double> max) {
+        max.compute(getLocalizedName(), ($, value) -> value == null ? this.value : value + this.value);
     }
 }

@@ -1,8 +1,9 @@
 package com.snowstep115.itemlorestats.lore;
 
+import java.util.Map;
+
 import com.snowstep115.itemlorestats.IlsMod;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
@@ -15,6 +16,7 @@ public final class DamageLore extends Lore {
     public final int maximumValue;
 
     public DamageLore() {
+        super("text.damagelore.name");
         int d1, d2;
         do {
             d1 = (int) Math.round(IlsMod.SEED.nextGaussian() * 127d);
@@ -25,6 +27,7 @@ public final class DamageLore extends Lore {
     }
 
     public DamageLore(String value) {
+        super("text.damagelore.name");
         String[] comps = value.split("-");
         this.minimumValue = Integer.parseInt(comps[0]);
         this.maximumValue = Integer.parseInt(comps[1]);
@@ -45,7 +48,12 @@ public final class DamageLore extends Lore {
 
     @Override
     public String getFormattedString() {
-        return String.format("§6%s§r +%d-%d", I18n.format("text.damagelore.name"), this.minimumValue,
-                this.maximumValue);
+        return String.format("%s +%d-%d", getLocalizedName(), this.minimumValue, this.maximumValue);
+    }
+
+    @Override
+    public void makeStatistics(Map<String, Double> min, Map<String, Double> max) {
+        min.compute(getLocalizedName(), ($, value) -> value == null ? this.minimumValue : value + this.minimumValue);
+        max.compute(getLocalizedName(), ($, value) -> value == null ? this.maximumValue : value + this.maximumValue);
     }
 }
