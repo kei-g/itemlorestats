@@ -47,21 +47,20 @@ public abstract class CommonProxy {
         if (source instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) source;
             Stats stats = new Stats();
-            for (ItemStack equip : player.getEquipmentAndArmor())
-                Lore.deserialize(equip, lore -> lore.applyTo(stats));
+            Lore.deserialize(player, lore -> lore.applyTo(stats));
             double damage = stats.damage;
             if (stats.critical.get())
                 damage = damage * stats.criticalDamage / 100;
             event.setAmount((float) damage);
             if (stats.critical.get())
-                IlsMod.info(source, "§dYou crit hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), event.getAmount());
+                IlsMod.info(source, "§dYou crit hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(),
+                        event.getAmount());
             else
                 IlsMod.info(source, "§dYou hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), event.getAmount());
         } else if (living instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) living;
             Stats stats = new Stats();
-            for (ItemStack itemstack : player.getEquipmentAndArmor())
-                Lore.deserialize(itemstack, lore -> lore.applyTo(stats));
+            Lore.deserialize(player, lore -> lore.applyTo(stats));
             double damage = event.getAmount() - event.getAmount() * stats.reduction / 100;
             if (damage < 0)
                 damage = 0;

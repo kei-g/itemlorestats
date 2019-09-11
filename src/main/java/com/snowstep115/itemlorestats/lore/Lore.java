@@ -6,6 +6,7 @@ import com.snowstep115.itemlorestats.util.I18n;
 import com.snowstep115.itemlorestats.util.ResourceUtil;
 import com.snowstep115.itemlorestats.util.StringUtil;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -51,6 +52,11 @@ public abstract class Lore {
     public static void deserialize(ItemStack itemstack, Consumer<Lore> consumer) {
         NBTTagCompound tag = itemstack.getTagCompound();
         Lore.deserialize(tag, consumer);
+    }
+
+    public static void deserialize(EntityLivingBase living, Consumer<Lore> consumer) {
+        for (ItemStack equip : living.getEquipmentAndArmor())
+            Lore.deserialize(equip, consumer);
     }
 
     public static Lore parse(String description) {
