@@ -6,6 +6,7 @@ import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.common.config.Config.LangKey;
 import net.minecraftforge.common.config.Config.RangeDouble;
+import net.minecraftforge.common.config.Config.RangeInt;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -15,6 +16,10 @@ public class IlsConfig {
     @LangKey("config.itemlorestats.base_critical_damage.name")
     @RangeDouble(min = 0, max = 1000)
     public static double baseCriticalDamage = 150;
+
+    @LangKey("config.itemlorestats.block_slow_level.name")
+    @RangeInt(min = 1, max = 31)
+    public static int blockSlowLevel = 6;
 
     @LangKey("config.itemlorestats.life_steal.name")
     @RangeDouble(min = 0, max = 100)

@@ -15,4 +15,5 @@ text.reflectlore.name=ダメージ反射発動率
 text.speedlore.name=移動速度
 
 config.itemlorestats.base_critical_damage.name=クリティカル基礎ダメージ(%%)
+config.itemlorestats.block_slow_level.name=ブロック時減速レベル
 config.itemlorestats.life_steal.name=体力吸収率(%%)
