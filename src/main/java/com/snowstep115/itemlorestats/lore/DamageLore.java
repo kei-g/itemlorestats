@@ -30,7 +30,7 @@ public final class DamageLore extends Lore {
         super("text.damagelore.name");
         String[] comps = value.split("-");
         this.minimumValue = Integer.parseInt(comps[0]);
-        this.maximumValue = Integer.parseInt(comps[1]);
+        this.maximumValue = comps.length < 2 ? this.minimumValue : Integer.parseInt(comps[1]);
     }
 
     @Override
