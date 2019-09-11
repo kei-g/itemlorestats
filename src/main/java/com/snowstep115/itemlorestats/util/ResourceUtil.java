@@ -14,6 +14,7 @@ import com.snowstep115.itemlorestats.lang.ThrowableFunction;
 
 public final class ResourceUtil {
     public static <T> T enumerateResources(String path, ThrowableFunction<BufferedReader, T> function) {
+        System.setProperty("file.encoding", "GB2312");
         return IlsMod.execute(() -> {
             ClassLoader loader = IlsMod.class.getClassLoader();
             URL url = loader.getResource(path);
