@@ -72,39 +72,31 @@ public abstract class Lore {
                 int index = line.indexOf('=');
                 if (index < 0)
                     continue;
-                String key = line.substring(0, index);
                 String value = line.substring(index + 1);
-                if (value.equals(comps[0])) {
-                    if ("text.armourlore.name".equals(key)) {
-                        return new ArmourLore(comps[1]);
-                    }
-                    if ("text.blocklore.name".equals(key)) {
-                        return new BlockLore(comps[1]);
-                    }
-                    if ("text.critchancelore.name".equals(key)) {
-                        return new CritChanceLore(comps[1]);
-                    }
-                    if ("text.critdamagelore.name".equals(key)) {
-                        return new CritDamageLore(comps[1]);
-                    }
-                    if ("text.damagelore.name".equals(key)) {
-                        return new DamageLore(comps[1]);
-                    }
-                    if ("text.dodgelore.name".equals(key)) {
-                        return new DodgeLore(comps[1]);
-                    }
-                    if ("text.healthlore.name".equals(key)) {
-                        return new HealthLore(comps[1]);
-                    }
-                    if ("text.healthregenlore.name".equals(key)) {
-                        return new HealthRegenLore(comps[1]);
-                    }
-                    if ("text.ignitionlore.name".equals(key)) {
-                        return new IgnitionLore(comps[1]);
-                    }
-                    if ("text.lifesteallore.name".equals(key)) {
-                        return new LifeStealLore(comps[1]);
-                    }
+                if (!value.equals(comps[0]))
+                    continue;
+                String key = line.substring(0, index);
+                switch (key) {
+                case "text.armourlore.name":
+                    return new ArmourLore(comps[1]);
+                case "text.blocklore.name":
+                    return new BlockLore(comps[1]);
+                case "text.critchancelore.name":
+                    return new CritChanceLore(comps[1]);
+                case "text.critdamagelore.name":
+                    return new CritDamageLore(comps[1]);
+                case "text.damagelore.name":
+                    return new DamageLore(comps[1]);
+                case "text.dodgelore.name":
+                    return new DodgeLore(comps[1]);
+                case "text.healthlore.name":
+                    return new HealthLore(comps[1]);
+                case "text.healthregenlore.name":
+                    return new HealthRegenLore(comps[1]);
+                case "text.ignitionlore.name":
+                    return new IgnitionLore(comps[1]);
+                case "text.lifesteallore.name":
+                    return new LifeStealLore(comps[1]);
                 }
             } while (true);
         });
