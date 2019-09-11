@@ -12,6 +12,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
@@ -59,10 +61,16 @@ public abstract class CommonProxy {
                 damage = 0;
             if (stats.dodged.get())
                 damage = 0;
+            if (stats.blocked.get())
+                damage = 0;
             if (source != null) {
                 if (stats.dodged.get())
                     IlsMod.info(living, "%s §dhit you, but you dodged.§r", source.getName());
-                else
+                else if (stats.blocked.get()) {
+                    Potion potion = Potion.getPotionById(2);
+                    player.addPotionEffect(new PotionEffect(potion, 30, 6, true, true));
+                    IlsMod.info(living, "%s §dhit you, but you blocked.§r", source.getName());
+                } else
                     IlsMod.info(living, "%s §dhit you for §6%.2f §ddamage.§r", source.getName(), damage);
             }
             damage = damage * 20 / stats.health;

@@ -1,6 +1,7 @@
 itemGroup.itemlorestats=Item Lore Stats
 
 text.armourlore.name=ダメージ軽減
+text.blocklore.name=ブロック
 text.damagelore.name=ダメージ増加
 text.dodgelore.name=回避
 text.healthlore.name=体力増加
