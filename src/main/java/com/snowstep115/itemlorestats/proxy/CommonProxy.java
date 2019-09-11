@@ -88,7 +88,7 @@ public abstract class CommonProxy {
                 } else
                     IlsMod.info(living, "%s §dhit you for §6%.2f §ddamage.§r", source.getName(), damage);
             }
-            damage = damage * 20 / stats.health;
+            damage = damage * player.getMaxHealth() / stats.health;
             event.setAmount((float) damage);
         }
     }
@@ -113,7 +113,7 @@ public abstract class CommonProxy {
             EntityPlayer player = (EntityPlayer) living;
             Stats stats = new Stats(player);
             Lore.deserialize(player, lore -> lore.applyTo(stats));
-            double heal = event.getAmount() * 20 / stats.health;
+            double heal = event.getAmount() * player.getMaxHealth() / stats.health;
             event.setAmount((float) heal);
         }
     }
