@@ -20,6 +20,7 @@ public final class Stats {
     public double reduction;
     public double reflection;
     public double regeneration;
+    public double slowness;
     public double speed;
 
     public Stats(EntityLivingBase living) {
@@ -32,4 +33,5 @@ public final class Stats {
     public final Lazy<Boolean> ignited = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.ignition);
     public final Lazy<Boolean> lifeStolen = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.lifeSteal);
     public final Lazy<Boolean> reflected = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.reflection);
+    public final Lazy<Boolean> slown = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.slowness);
 }

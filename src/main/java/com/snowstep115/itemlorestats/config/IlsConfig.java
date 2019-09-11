@@ -19,11 +19,15 @@ public class IlsConfig {
 
     @LangKey("config.itemlorestats.block_slow_level.name")
     @RangeInt(min = 1, max = 31)
-    public static int blockSlowLevel = 6;
+    public static int blockSlowLevel = 3;
 
     @LangKey("config.itemlorestats.life_steal.name")
     @RangeDouble(min = 0, max = 100)
     public static double lifeSteal = 15;
+
+    @LangKey("config.itemlorestats.slow_level.name")
+    @RangeInt(min = 1, max = 31)
+    public static int slowLevel = 6;
 
     @EventBusSubscriber
     static class ConfigSubscriber {

@@ -75,6 +75,10 @@ public abstract class CommonProxy {
             if (stats.ignited.get()) {
                 living.setFire(3);
             }
+            if (stats.slown.get()) {
+                Potion slow = Potion.getPotionById(2);
+                living.addPotionEffect(new PotionEffect(slow, 60, IlsConfig.slowLevel, true, true));
+            }
         }
         if (living instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) living;
@@ -110,6 +114,10 @@ public abstract class CommonProxy {
             }
             damage = damage * player.getMaxHealth() / stats.health;
             event.setAmount((float) damage);
+            if (stats.slown.get() && source instanceof EntityLivingBase) {
+                EntityLivingBase enemy = (EntityLivingBase) source;
+                enemy.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 60, IlsConfig.slowLevel, true, true));
+            }
         }
     }
 

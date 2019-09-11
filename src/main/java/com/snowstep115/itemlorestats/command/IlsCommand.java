@@ -16,6 +16,7 @@ import com.snowstep115.itemlorestats.lore.IgnitionLore;
 import com.snowstep115.itemlorestats.lore.LifeStealLore;
 import com.snowstep115.itemlorestats.lore.Lore;
 import com.snowstep115.itemlorestats.lore.ReflectLore;
+import com.snowstep115.itemlorestats.lore.SlowLore;
 import com.snowstep115.itemlorestats.lore.SpeedLore;
 import com.snowstep115.itemlorestats.lore.Stats;
 
@@ -54,7 +55,7 @@ public final class IlsCommand extends CommandBase {
         switch (subcommand) {
         case "createlore":
             addLoreItem(mp, Items.IRON_SWORD, new DamageLore(), new CritChanceLore(), new CritDamageLore(),
-                    new LifeStealLore(), new IgnitionLore());
+                    new LifeStealLore(), new IgnitionLore(), new SlowLore());
             addLoreItem(mp, Items.LEATHER_HELMET, new ArmourLore(), new BlockLore(), new DodgeLore(), new HealthLore(),
                     new HealthRegenLore());
             addLoreItem(mp, Items.LEATHER_CHESTPLATE, new ArmourLore(), new BlockLore(), new DodgeLore(),
@@ -81,6 +82,7 @@ public final class IlsCommand extends CommandBase {
             IlsMod.info(mp, "%s: %.2f%%", new LifeStealLore().getStatsName(), stats.lifeSteal);
             IlsMod.info(mp, "%s: %.2f%%", new IgnitionLore().getStatsName(), stats.ignition);
             IlsMod.info(mp, "%s: %.2f%%", new ReflectLore().getStatsName(), stats.reflection);
+            IlsMod.info(mp, "%s: %.2f%%", new SlowLore().getStatsName(), stats.slowness);
             IlsMod.info(mp, "%s: %.2f%%", new SpeedLore().getStatsName(), stats.speed);
             break;
         }
