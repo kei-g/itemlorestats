@@ -75,6 +75,12 @@ public abstract class Lore {
                     if ("text.blocklore.name".equals(key)) {
                         return new BlockLore(comps[1]);
                     }
+                    if ("text.critchancelore.name".equals(key)) {
+                        return new CritChanceLore(comps[1]);
+                    }
+                    if ("text.critdamagelore.name".equals(key)) {
+                        return new CritDamageLore(comps[1]);
+                    }
                     if ("text.damagelore.name".equals(key)) {
                         return new DamageLore(comps[1]);
                     }

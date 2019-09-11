@@ -2,6 +2,8 @@ itemGroup.itemlorestats=Item Lore Stats
 
 text.armourlore.name=Armour
 text.blocklore.name=Block
+text.critchancelore.name=Crit Chance
+text.critdamagelore.name=Crit Damage
 text.damagelore.name=Damage
 text.dodgelore.name=Dodge
 text.healthlore.name=Health

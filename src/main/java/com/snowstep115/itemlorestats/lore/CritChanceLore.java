@@ -2,16 +2,16 @@ package com.snowstep115.itemlorestats.lore;
 
 import com.snowstep115.itemlorestats.IlsMod;
 
-public final class DodgeLore extends Lore {
-    public double possibility;
+public final class CritChanceLore extends Lore {
+    private final double possibility;
 
-    public DodgeLore() {
-        super("text.dodgelore.name");
-        this.possibility = 10d + IlsMod.SEED.nextGaussian() * 10d;
+    public CritChanceLore() {
+        super("text.critchancelore.name");
+        this.possibility = IlsMod.SEED.nextGaussian() * 5d;
     }
 
-    public DodgeLore(String value) {
-        super("text.dodgelore.name");
+    public CritChanceLore(String value) {
+        super("text.critchancelore.name");
         int index = value.lastIndexOf('%');
         if (index < 0)
             throw new IllegalArgumentException();
@@ -20,7 +20,7 @@ public final class DodgeLore extends Lore {
 
     @Override
     public void applyTo(Stats stats) {
-        stats.dodge += this.possibility;
+        stats.criticalChance += this.possibility;
     }
 
     @Override
