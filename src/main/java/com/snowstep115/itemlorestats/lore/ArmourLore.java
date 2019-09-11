@@ -1,19 +1,13 @@
 package com.snowstep115.itemlorestats.lore;
 
-import java.util.Map;
-
 import com.snowstep115.itemlorestats.IlsMod;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
 
 public final class ArmourLore extends Lore {
     public final double value;
 
     public ArmourLore() {
         super("text.armourlore.name");
-        this.value = IlsMod.SEED.nextGaussian() * 50d;
+        this.value = IlsMod.SEED.nextGaussian() * 10d;
     }
 
     public ArmourLore(String value) {
@@ -28,20 +22,9 @@ public final class ArmourLore extends Lore {
     }
 
     @Override
-    public boolean canApply(ItemStack itemstack) {
-        Item item = itemstack.getItem();
-        return item instanceof ItemArmor;
-    }
-
-    @Override
     public String getFormattedString() {
         if (0 < this.value)
             return String.format("%s +%.2f%%", getLocalizedName(), this.value);
         return String.format("%s %.2f%%", getLocalizedName(), this.value);
-    }
-
-    @Override
-    public void makeStatistics(Map<String, Double> min, Map<String, Double> max) {
-        max.compute(getLocalizedName(), ($, value) -> value == null ? this.value : value + this.value);
     }
 }

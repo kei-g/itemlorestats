@@ -49,18 +49,19 @@ public abstract class CommonProxy {
             Stats stats = new Stats();
             for (ItemStack itemstack : player.getEquipmentAndArmor())
                 Lore.deserialize(itemstack, lore -> lore.applyTo(stats));
+            double damage = event.getAmount() - event.getAmount() * stats.reduction / 100;
+            if (damage < 0)
+                damage = 0;
+            if (stats.dodged.get())
+                damage = 0;
             if (source != null) {
-                if (IlsMod.SEED.nextDouble() * 100 <= stats.dodge) {
-                    event.setAmount(0);
+                if (stats.dodged.get())
                     IlsMod.info(living, "%s §dhit you, but you dodged.§r", source.getName());
-                } else {
-                    double damage = event.getAmount() - event.getAmount() * stats.reduction / 100;
-                    if (damage < 0)
-                        damage = 0;
-                    event.setAmount((float) damage);
-                    IlsMod.info(living, "%s §dhit you for §6%.2f §ddamage.§r", source.getName(), event.getAmount());
-                }
+                else
+                    IlsMod.info(living, "%s §dhit you for §6%.2f §ddamage.§r", source.getName(), damage);
             }
+            damage = damage * 20 / stats.health;
+            event.setAmount((float) damage);
         }
     }
 

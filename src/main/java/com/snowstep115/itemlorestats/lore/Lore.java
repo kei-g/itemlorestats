@@ -1,6 +1,5 @@
 package com.snowstep115.itemlorestats.lore;
 
-import java.util.Map;
 import java.util.function.Consumer;
 
 import com.snowstep115.itemlorestats.util.I18n;
@@ -79,6 +78,9 @@ public abstract class Lore {
                     if ("text.dodgelore.name".equals(key)) {
                         return new DodgeLore(comps[1]);
                     }
+                    if ("text.healthlore.name".equals(key)) {
+                        return new HealthLore(comps[1]);
+                    }
                 }
             } while (true);
         });
@@ -92,17 +94,17 @@ public abstract class Lore {
 
     public abstract void applyTo(Stats stats);
 
-    public abstract boolean canApply(ItemStack itemstack);
-
     public abstract String getFormattedString();
 
     public String getLocalizedName() {
         return I18n.format(this.unlocalizedName);
     }
 
+    public String getStatsName() {
+        return getLocalizedName();
+    }
+
     public String getUnlocalizedName() {
         return this.unlocalizedName;
     }
-
-    public abstract void makeStatistics(Map<String, Double> min, Map<String, Double> max);
 }

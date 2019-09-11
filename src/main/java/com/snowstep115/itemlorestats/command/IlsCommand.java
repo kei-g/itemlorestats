@@ -6,6 +6,7 @@ import com.snowstep115.itemlorestats.IlsMod;
 import com.snowstep115.itemlorestats.lore.ArmourLore;
 import com.snowstep115.itemlorestats.lore.DamageLore;
 import com.snowstep115.itemlorestats.lore.DodgeLore;
+import com.snowstep115.itemlorestats.lore.HealthLore;
 import com.snowstep115.itemlorestats.lore.Lore;
 import com.snowstep115.itemlorestats.lore.Stats;
 
@@ -44,18 +45,19 @@ public final class IlsCommand extends CommandBase {
         switch (subcommand) {
         case "createlore":
             addLoreItem(mp, Items.IRON_SWORD, new DamageLore());
-            addLoreItem(mp, Items.LEATHER_HELMET, new ArmourLore(), new DodgeLore());
-            addLoreItem(mp, Items.LEATHER_CHESTPLATE, new ArmourLore(), new DodgeLore());
-            addLoreItem(mp, Items.LEATHER_LEGGINGS, new ArmourLore(), new DodgeLore());
-            addLoreItem(mp, Items.LEATHER_BOOTS, new ArmourLore(), new DodgeLore());
+            addLoreItem(mp, Items.LEATHER_HELMET, new ArmourLore(), new DodgeLore(), new HealthLore());
+            addLoreItem(mp, Items.LEATHER_CHESTPLATE, new ArmourLore(), new DodgeLore(), new HealthLore());
+            addLoreItem(mp, Items.LEATHER_LEGGINGS, new ArmourLore(), new DodgeLore(), new HealthLore());
+            addLoreItem(mp, Items.LEATHER_BOOTS, new ArmourLore(), new DodgeLore(), new HealthLore());
             break;
         case "stats":
             Stats stats = new Stats();
             for (ItemStack equip : mp.getEquipmentAndArmor())
                 Lore.deserialize(equip, lore -> lore.applyTo(stats));
-            IlsMod.info(mp, "%s: %.2f-%.2f", new DamageLore().getLocalizedName(), stats.damageMin, stats.damageMax);
-            IlsMod.info(mp, "%s: %.2f%%", new ArmourLore().getLocalizedName(), stats.reduction);
-            IlsMod.info(mp, "%s: %.2f%%", new DodgeLore().getLocalizedName(), stats.dodge);
+            IlsMod.info(mp, "%s: %.2f-%.2f", new DamageLore().getStatsName(), stats.damageMin, stats.damageMax);
+            IlsMod.info(mp, "%s: %.2f%%", new ArmourLore().getStatsName(), stats.reduction);
+            IlsMod.info(mp, "%s: %.2f%%", new DodgeLore().getStatsName(), stats.dodge);
+            IlsMod.info(mp, "%s: %.2f/%.2f", new HealthLore().getStatsName(), mp.getHealth() * stats.health / 20, stats.health);
             break;
         }
     }

@@ -1,14 +1,6 @@
 package com.snowstep115.itemlorestats.lore;
 
-import java.util.Map;
-
 import com.snowstep115.itemlorestats.IlsMod;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBow;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.item.ItemTool;
 
 public final class DamageLore extends Lore {
     public final int minimumValue;
@@ -18,8 +10,8 @@ public final class DamageLore extends Lore {
         super("text.damagelore.name");
         int d1, d2;
         do {
-            d1 = (int) Math.round(IlsMod.SEED.nextGaussian() * 127d);
-            d2 = (int) Math.round(IlsMod.SEED.nextGaussian() * 127d);
+            d1 = (int) Math.round(IlsMod.SEED.nextGaussian() * 20d);
+            d2 = (int) Math.round(IlsMod.SEED.nextGaussian() * 20d);
         } while (d1 < 0 || d2 < 0);
         this.minimumValue = Math.min(d1, d2);
         this.maximumValue = Math.max(d1, d2);
@@ -40,19 +32,7 @@ public final class DamageLore extends Lore {
     }
 
     @Override
-    public boolean canApply(ItemStack itemstack) {
-        Item item = itemstack.getItem();
-        return item instanceof ItemBow || item instanceof ItemSword || item instanceof ItemTool;
-    }
-
-    @Override
     public String getFormattedString() {
         return String.format("%s +%d-%d", getLocalizedName(), this.minimumValue, this.maximumValue);
-    }
-
-    @Override
-    public void makeStatistics(Map<String, Double> min, Map<String, Double> max) {
-        min.compute(getLocalizedName(), ($, value) -> value == null ? this.minimumValue : value + this.minimumValue);
-        max.compute(getLocalizedName(), ($, value) -> value == null ? this.maximumValue : value + this.maximumValue);
     }
 }
