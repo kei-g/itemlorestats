@@ -3,6 +3,8 @@ package com.snowstep115.itemlorestats.proxy;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.snowstep115.itemlorestats.IlsMod;
 import com.snowstep115.itemlorestats.config.IlsConfig;
 import com.snowstep115.itemlorestats.lore.Lore;
@@ -10,12 +12,15 @@ import com.snowstep115.itemlorestats.lore.Stats;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -105,6 +110,22 @@ public abstract class CommonProxy {
         IlsMod.info("dropsevent: %s, looting level: %d", living.getName(), event.getLootingLevel());
         for (EntityItem entity : event.getDrops())
             IlsMod.info("  -> %s", entity.getItem());
+    }
+
+    @SubscribeEvent
+    public static void livingEquipmentChangeEvent(final LivingEquipmentChangeEvent event) {
+        EntityLivingBase living = event.getEntityLiving();
+        if (living.world.isRemote)
+            return;
+        IlsMod.info("equipmentchangeevent: %s %s -> %s", living.getName(), event.getFrom(), event.getTo());
+        Stats stats = new Stats(living);
+        Lore.deserialize(living, lore -> lore.applyTo(stats));
+        AbstractAttributeMap attr = living.getAttributeMap();
+        Multimap<String, AttributeModifier> modifiers = ArrayListMultimap.create();
+        modifiers.put("generic.movementSpeed",
+                new AttributeModifier(UUID.fromString("91AEAA56-376B-4498-935B-2F7F68070635"), "generic.movementSpeed",
+                        stats.speed / 100, 2));
+        attr.applyAttributeModifiers(modifiers);
     }
 
     @SubscribeEvent

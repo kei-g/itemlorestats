@@ -19,6 +19,7 @@ public final class Stats {
     public double lifeSteal;
     public double reduction;
     public double regeneration;
+    public double speed;
 
     public Stats(EntityLivingBase living) {
         this.health = living.getMaxHealth();
