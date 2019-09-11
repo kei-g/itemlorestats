@@ -14,13 +14,15 @@ import com.snowstep115.itemlorestats.lang.ThrowableFunction;
 
 public final class ResourceUtil {
     public static <T> T enumerateResources(String path, ThrowableFunction<BufferedReader, T> function) {
-        System.setProperty("file.encoding", "GB2312");
         return IlsMod.execute(() -> {
             ClassLoader loader = IlsMod.class.getClassLoader();
             URL url = loader.getResource(path);
             String[] comps = url.getPath().split(":");
             String jarPath = comps[comps.length - 1].split("!")[0];
-            File file = new File(jarPath);
+            byte[] buf = jarPath.getBytes();
+            String gb2312Path = new String(buf, "GB2312");
+            IlsMod.info("%s", gb2312Path);
+            File file = new File(gb2312Path);
             JarFile jarFile = new JarFile(file);
             try {
                 Enumeration<JarEntry> entries = jarFile.entries();
