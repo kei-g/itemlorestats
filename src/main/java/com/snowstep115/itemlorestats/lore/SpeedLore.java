@@ -25,8 +25,6 @@ public final class SpeedLore extends Lore {
 
     @Override
     public String getFormattedString() {
-        if (0 < this.value)
-            return String.format("%s +%.2f%%", getLocalizedName(), this.value);
-        return String.format("%s %.2f%%", getLocalizedName(), this.value);
+        return String.format(this.value <= 0 ? "%s %.2f%%" : "%s +%.2f%%", getLocalizedName(), this.value);
     }
 }
