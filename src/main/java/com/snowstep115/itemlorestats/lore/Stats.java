@@ -59,10 +59,9 @@ public final class Stats {
     }
 
     public void apply(EntityPlayer source, EntityLivingBase living, LivingDamageEvent event) {
-        double damage = this.damage;
+        double damage = event.getAmount() + this.damage;
         if (this.critical.get())
-            damage = damage * this.criticalDamage / 100;
-        damage -= living.getTotalArmorValue();
+            damage *= this.criticalDamage / 100;
         if (damage < 0)
             damage = 0;
         event.setAmount((float) damage);
@@ -95,7 +94,7 @@ public final class Stats {
 
     public void apply(EntityLivingBase source, EntityPlayer living, LivingDamageEvent event) {
         Stats stats = new Stats(living);
-        double damage = event.getAmount() - living.getTotalArmorValue();
+        double damage = event.getAmount();
         if (damage < 0)
             damage = 0;
         damage -= damage * stats.reduction / 100;
