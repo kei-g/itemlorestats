@@ -44,6 +44,12 @@ public final class Stats {
     public final Lazy<Boolean> slown = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.slowness);
 
     public void apply(Entity source, EntityLivingBase living, LivingDamageEvent event) {
+        Stats stats = new Stats(living);
+        double damage = event.getAmount() - event.getAmount() * stats.reduction / 100;
+        if (damage < 0)
+            damage = 0;
+        damage = damage * living.getMaxHealth() / stats.health;
+        event.setAmount((float) damage);
     }
 
     public void apply(Entity source, EntityPlayer living, LivingDamageEvent event) {
@@ -59,71 +65,117 @@ public final class Stats {
     }
 
     public void apply(EntityPlayer source, EntityLivingBase living, LivingDamageEvent event) {
+        Stats stats = new Stats(living);
         double damage = event.getAmount() + this.damage;
         if (this.critical.get())
             damage *= this.criticalDamage / 100;
+        damage -= damage * stats.reduction / 100;
         if (damage < 0)
             damage = 0;
-        event.setAmount((float) damage);
-        if (this.critical.get())
-            IlsMod.info(source, "§dYou crit hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), damage);
-        else
-            IlsMod.info(source, "§dYou hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), damage);
-        if (this.lifeStolen.get()) {
-            double stolen = damage * IlsConfig.lifeSteal / 100;
-            IlsMod.info(source, "§dYou stole §6%.2f §dhealth.§r", stolen);
-            double health = this.health * source.getHealth() / source.getMaxHealth();
-            health += stolen;
-            if (this.health <= health)
-                health = this.health;
+        if (stats.reflected.get()) {
+            if (this.critical.get())
+                IlsMod.info(source, "§dYou crit hit a §f%s§d but reflected.§r", living.getName());
+            else
+                IlsMod.info(source, "§dYou hit a §f%s§d but reflected.§r", living.getName());
+            double health = source.getHealth() * this.health / source.getMaxHealth();
+            health -= damage;
+            if (health < 0)
+                health = 0;
             health = health * source.getMaxHealth() / this.health;
             source.setHealth((float) health);
+            damage = 0;
+        } else if (stats.dodged.get()) {
+            if (this.critical.get())
+                IlsMod.info(source, "§dYou crit hit a §f%s§d but dodged.§r", living.getName());
+            else
+                IlsMod.info(source, "§dYou hit a §f%s§d but dodged.§r", living.getName());
+            damage = 0;
+        } else if (stats.blocked.get()) {
+            if (this.critical.get())
+                IlsMod.info(source, "§dYou crit hit a §f%s§d but blocked.§r", living.getName());
+            else
+                IlsMod.info(source, "§dYou hit a §f%s§d but blocked.§r", living.getName());
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 60, IlsConfig.blockSlowLevel, true, true));
+            damage = 0;
+        } else {
+            if (this.critical.get())
+                IlsMod.info(source, "§dYou crit hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), damage);
+            else
+                IlsMod.info(source, "§dYou hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), damage);
+            if (this.lifeStolen.get()) {
+                double stolen = damage * IlsConfig.lifeSteal / 100;
+                IlsMod.info(source, "§dYou stole §6%.2f §dhealth.§r", stolen);
+                double health = this.health * source.getHealth() / source.getMaxHealth();
+                health += stolen;
+                if (this.health <= health)
+                    health = this.health;
+                health = health * source.getMaxHealth() / this.health;
+                source.setHealth((float) health);
+            }
         }
-        if (this.ignited.get()) {
+        damage = damage * living.getMaxHealth() / stats.health;
+        event.setAmount((float) damage);
+        if (this.ignited.get())
             living.setFire(3);
-        }
-        if (this.slown.get()) {
-            Potion slow = Potion.getPotionById(2);
-            living.addPotionEffect(new PotionEffect(slow, 60, IlsConfig.slowLevel, true, true));
-        }
-        if (this.poisoned.get()) {
-            Potion poison = Potion.getPotionById(19);
-            living.addPotionEffect(new PotionEffect(poison, 60, IlsConfig.poisonLevel, true, true));
-        }
+        if (this.slown.get())
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 60, IlsConfig.slowLevel, true, true));
+        if (this.poisoned.get())
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(19), 60, IlsConfig.poisonLevel, true, true));
     }
 
     public void apply(EntityLivingBase source, EntityPlayer living, LivingDamageEvent event) {
         Stats stats = new Stats(living);
-        double damage = event.getAmount();
-        if (damage < 0)
-            damage = 0;
+        double damage = event.getAmount() + this.damage;
+        if (this.critical.get())
+            damage *= this.criticalDamage / 100;
         damage -= damage * stats.reduction / 100;
         if (damage < 0)
             damage = 0;
-        if (stats.dodged.get())
-            damage = 0;
-        if (stats.blocked.get())
-            damage = 0;
         if (stats.reflected.get()) {
-            IlsMod.info(living, "%s §dhit you, but you reflected.§r", source.getName());
-        } else if (stats.dodged.get()) {
-            IlsMod.info(living, "%s §dhit you, but you dodged.§r", source.getName());
-        } else if (stats.blocked.get()) {
-            Potion potion = Potion.getPotionById(2);
-            living.addPotionEffect(new PotionEffect(potion, 30, IlsConfig.blockSlowLevel, true, true));
-            IlsMod.info(living, "%s §dhit you, but you blocked.§r", source.getName());
-        } else
-            IlsMod.info(living, "%s §dhit you for §6%.2f §ddamage.§r", source.getName(), damage);
-        if (stats.reflected.get()) {
-            double health = source.getHealth();
+            if (this.critical.get())
+                IlsMod.info(living, "%s §dcrit hit you, but you reflected.§r", source.getName());
+            else
+                IlsMod.info(living, "%s §dhit you, but you reflected.§r", source.getName());
+            double health = source.getHealth() * this.health / source.getMaxHealth();
             health -= damage;
             if (health < 0)
                 health = 0;
+            health = health * source.getMaxHealth() / this.health;
             source.setHealth((float) health);
             damage = 0;
+        } else if (stats.dodged.get()) {
+            if (this.critical.get())
+                IlsMod.info(living, "%s §dcrit hit you, but you dodged.§r", source.getName());
+            else
+                IlsMod.info(living, "%s §dhit you, but you dodged.§r", source.getName());
+            damage = 0;
+        } else if (stats.blocked.get()) {
+            if (this.critical.get())
+                IlsMod.info(living, "%s §dcrit hit you, but you blocked.§r", source.getName());
+            else
+                IlsMod.info(living, "%s §dhit you, but you blocked.§r", source.getName());
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 30, IlsConfig.blockSlowLevel, true, true));
+            damage = 0;
+        } else {
+            if (this.critical.get())
+                IlsMod.info(living, "%s §dcrit hit you for §6%.2f §ddamage.§r", source.getName(), damage);
+            else
+                IlsMod.info(living, "%s §dhit you for §6%.2f §ddamage.§r", source.getName(), damage);
+            if (this.lifeStolen.get()) {
+                double stolen = damage * IlsConfig.lifeSteal / 100;
+                IlsMod.info(source, "§d%s stole §6%.2f §dhealth.§r", source.getName(), stolen);
+                double health = this.health * source.getHealth() / source.getMaxHealth();
+                health += stolen;
+                if (this.health <= health)
+                    health = this.health;
+                health = health * source.getMaxHealth() / this.health;
+                source.setHealth((float) health);
+            }
         }
         damage = damage * living.getMaxHealth() / stats.health;
         event.setAmount((float) damage);
+        if (stats.ignited.get())
+            source.setFire(3);
         if (stats.slown.get())
             source.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 60, IlsConfig.slowLevel, true, true));
         if (stats.poisoned.get())

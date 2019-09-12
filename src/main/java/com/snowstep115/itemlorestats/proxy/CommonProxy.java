@@ -42,7 +42,7 @@ public abstract class CommonProxy {
         EntityLivingBase living = event.getEntityLiving();
         if (living.world.isRemote)
             return;
-        Entity source = event.getSource().getImmediateSource();
+        Entity source = event.getSource().getTrueSource();
         if (source instanceof EntityLivingBase) {
             EntityLivingBase source1 = (EntityLivingBase) source;
             Stats stats = new Stats(source1);
@@ -63,7 +63,8 @@ public abstract class CommonProxy {
             if (living instanceof EntityPlayer) {
                 EntityPlayer living1 = (EntityPlayer) living;
                 stats.apply(source, living1, event);
-            }
+            } else
+                stats.apply(source, living, event);
         }
     }
 
@@ -97,7 +98,6 @@ public abstract class CommonProxy {
         EntityLivingBase living = event.getEntityLiving();
         if (living.world.isRemote)
             return;
-        IlsMod.info("healevent: %s %f", living == null ? "null" : living.getName(), event.getAmount());
         Stats stats = new Stats(living);
         double heal = event.getAmount() * living.getMaxHealth() / stats.health;
         event.setAmount((float) heal);
@@ -108,7 +108,10 @@ public abstract class CommonProxy {
         EntityLivingBase living = event.getEntityLiving();
         if (living.world.isRemote)
             return;
-        IlsMod.info("hurtevent: %s %f", living == null ? "null" : living.getName(), event.getAmount());
+        IlsMod.info("hurtevent: %s %f", living.getName(), event.getAmount());
+        Stats stats = new Stats(living);
+        double damage = event.getAmount() * living.getMaxHealth() / stats.health;
+        event.setAmount((float) damage);
     }
 
     public static final ConcurrentHashMap<UUID, Integer> TICKS = new ConcurrentHashMap<>();
