@@ -21,6 +21,9 @@ public class IlsConfig {
     @RangeInt(min = 1, max = 31)
     public static int blockSlowLevel = 3;
 
+    @LangKey("config.itemlorestats.harming_level.name")
+    public static int harmingLevel = 1;
+
     @LangKey("config.itemlorestats.life_steal.name")
     @RangeDouble(min = 0, max = 100)
     public static double lifeSteal = 15;

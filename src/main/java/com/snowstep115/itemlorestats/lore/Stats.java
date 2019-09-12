@@ -19,6 +19,7 @@ public final class Stats {
     public double damageMax;
     public double damageMin;
     public final Probabilistic dodge = new Probabilistic();
+    public final Probabilistic harming = new Probabilistic();
     public double health;
     public final Probabilistic ignition = new Probabilistic();
     public final Probabilistic lifeSteal = new Probabilistic();
@@ -105,6 +106,8 @@ public final class Stats {
         }
         damage = damage * living.getMaxHealth() / stats.health;
         event.setAmount((float) damage);
+        if (this.harming.occurred())
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(7), 60, IlsConfig.harmingLevel, true, true));
         if (this.ignition.occurred())
             living.setFire(3);
         if (this.slowness.occurred())
@@ -166,14 +169,16 @@ public final class Stats {
         }
         damage = damage * living.getMaxHealth() / stats.health;
         event.setAmount((float) damage);
-        if (stats.ignition.occurred())
-            source.setFire(3);
-        if (stats.slowness.occurred())
-            source.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 60, IlsConfig.slowLevel, true, true));
-        if (stats.poison.occurred())
-            source.addPotionEffect(new PotionEffect(Potion.getPotionById(19), 60, IlsConfig.poisonLevel, true, true));
-        if (stats.wither.occurred())
-            source.addPotionEffect(new PotionEffect(Potion.getPotionById(20), 60, IlsConfig.witherLevel, true, true));
+        if (this.harming.occurred())
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(7), 60, IlsConfig.harmingLevel, true, true));
+        if (this.ignition.occurred())
+            living.setFire(3);
+        if (this.slowness.occurred())
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 60, IlsConfig.slowLevel, true, true));
+        if (this.poison.occurred())
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(19), 60, IlsConfig.poisonLevel, true, true));
+        if (this.wither.occurred())
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(20), 60, IlsConfig.witherLevel, true, true));
     }
 
     public void apply(EntityPlayer source, EntityPlayer living, LivingDamageEvent event) {

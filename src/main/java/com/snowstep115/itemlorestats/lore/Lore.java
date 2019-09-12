@@ -89,6 +89,8 @@ public abstract class Lore {
                     return new DamageLore(comps[1]);
                 case "text.dodgelore.name":
                     return new DodgeLore(comps[1]);
+                case "text.harminglore.name":
+                    return new HarmingLore(comps[1]);
                 case "text.healthlore.name":
                     return new HealthLore(comps[1]);
                 case "text.healthregenlore.name":
