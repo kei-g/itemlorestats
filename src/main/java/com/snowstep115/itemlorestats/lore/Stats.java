@@ -31,6 +31,7 @@ public final class Stats {
     public final Probabilistic slowness = new Probabilistic();
     public double speed;
     public final Probabilistic wither = new Probabilistic();
+    public double xpBonus;
 
     public Stats(EntityLivingBase living) {
         this.health = living.getMaxHealth();

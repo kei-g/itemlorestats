@@ -23,6 +23,7 @@ import com.snowstep115.itemlorestats.lore.SlowLore;
 import com.snowstep115.itemlorestats.lore.SpeedLore;
 import com.snowstep115.itemlorestats.lore.Stats;
 import com.snowstep115.itemlorestats.lore.WitherLore;
+import com.snowstep115.itemlorestats.lore.XpBonusLore;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -62,15 +63,15 @@ public final class IlsCommand extends CommandBase {
         case "createlore":
             addLoreItem(mp, Items.IRON_SWORD, new DamageLore(), new CritChanceLore(), new CritDamageLore(),
                     new LifeStealLore(), new IgnitionLore(), new SlowLore(), new PoisonLore(), new WitherLore(),
-                    new HarmingLore(), new BlindLore());
+                    new HarmingLore(), new BlindLore(), new XpBonusLore());
             addLoreItem(mp, Items.LEATHER_HELMET, new ArmourLore(), new BlockLore(), new DodgeLore(), new HealthLore(),
-                    new HealthRegenLore());
+                    new HealthRegenLore(), new XpBonusLore());
             addLoreItem(mp, Items.LEATHER_CHESTPLATE, new ArmourLore(), new BlockLore(), new DodgeLore(),
-                    new HealthLore(), new HealthRegenLore(), new ReflectLore());
+                    new HealthLore(), new HealthRegenLore(), new ReflectLore(), new XpBonusLore());
             addLoreItem(mp, Items.LEATHER_LEGGINGS, new ArmourLore(), new BlockLore(), new DodgeLore(),
-                    new HealthLore(), new HealthRegenLore());
+                    new HealthLore(), new HealthRegenLore(), new XpBonusLore());
             addLoreItem(mp, Items.LEATHER_BOOTS, new ArmourLore(), new BlockLore(), new DodgeLore(), new HealthLore(),
-                    new HealthRegenLore(), new SpeedLore());
+                    new HealthRegenLore(), new SpeedLore(), new XpBonusLore());
             break;
         case "lore":
             if (args.length < 2)
@@ -131,6 +132,7 @@ public final class IlsCommand extends CommandBase {
             IlsMod.info(mp, "%s: %s", new HarmingLore().getStatsName(), stats.harming);
             IlsMod.info(mp, "%s: %s", new BlindLore().getStatsName(), stats.blind);
             IlsMod.info(mp, "%s: %.2f%%", new SpeedLore().getStatsName(), stats.speed);
+            IlsMod.info(mp, "%s: %.2f%%", new XpBonusLore().getStatsName(), stats.xpBonus);
             break;
         }
     }

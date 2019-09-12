@@ -111,6 +111,8 @@ public abstract class Lore {
                     return new SpeedLore(comps[1]);
                 case "text.witherlore.name":
                     return new WitherLore(comps[1]);
+                case "text.xpbonuslore.name":
+                    return new XpBonusLore(comps[1]);
                 }
             } while (true);
         });

@@ -13,12 +13,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.PlayerPickupXpEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -113,6 +115,20 @@ public abstract class CommonProxy {
         Stats stats = new Stats(living);
         double damage = event.getAmount() * living.getMaxHealth() / stats.health;
         event.setAmount((float) damage);
+    }
+
+    @SubscribeEvent
+    public static void playerPickupXpEvent(final PlayerPickupXpEvent event) {
+        EntityPlayer player = event.getEntityPlayer();
+        if (player == null || player.world.isRemote)
+            return;
+        EntityXPOrb orb = event.getOrb();
+        if (orb == null)
+            return;
+        Stats stats = new Stats(player);
+        double xp = orb.xpValue;
+        xp += xp * stats.xpBonus / 100;
+        orb.xpValue = (int) xp;
     }
 
     public static final ConcurrentHashMap<UUID, Integer> TICKS = new ConcurrentHashMap<>();
