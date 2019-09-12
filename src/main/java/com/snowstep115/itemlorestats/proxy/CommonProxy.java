@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.snowstep115.itemlorestats.IlsMod;
-import com.snowstep115.itemlorestats.config.IlsConfig;
 import com.snowstep115.itemlorestats.lore.Stats;
 
 import net.minecraft.entity.Entity;
@@ -15,8 +14,6 @@ import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -46,83 +43,26 @@ public abstract class CommonProxy {
         if (living.world.isRemote)
             return;
         Entity source = event.getSource().getImmediateSource();
-        IlsMod.info("damageevent: %s -> %s %f", source == null ? "null" : source.getName(),
-                living == null ? "null" : living.getName(), event.getAmount());
-        if (source instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) source;
-            Stats stats = new Stats(player);
-            double damage = stats.damage;
-            if (stats.critical.get())
-                damage = damage * stats.criticalDamage / 100;
-            event.setAmount((float) damage);
-            if (stats.critical.get())
-                IlsMod.info(source, "§dYou crit hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(),
-                        event.getAmount());
-            else
-                IlsMod.info(source, "§dYou hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), event.getAmount());
-            if (stats.lifeStolen.get() && !(living instanceof EntityPlayer)) {
-                double stolen = damage * IlsConfig.lifeSteal / 100;
-                IlsMod.info(source, "§dYou stole §6%.2f §dhealth.§r", stolen);
-                double health = stats.health * player.getHealth() / player.getMaxHealth();
-                health += stolen;
-                if (stats.health <= health)
-                    health = stats.health;
-                health = health * player.getMaxHealth() / stats.health;
-                player.setHealth((float) health);
-            }
-            if (stats.ignited.get()) {
-                living.setFire(3);
-            }
-            if (stats.slown.get()) {
-                Potion slow = Potion.getPotionById(2);
-                living.addPotionEffect(new PotionEffect(slow, 60, IlsConfig.slowLevel, true, true));
-            }
-            if (stats.poisoned.get()) {
-                Potion poison = Potion.getPotionById(19);
-                living.addPotionEffect(new PotionEffect(poison, 60, IlsConfig.poisonLevel, true, true));
-            }
-        }
-        if (living instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) living;
-            Stats stats = new Stats(player);
-            double damage = event.getAmount() - event.getAmount() * stats.reduction / 100;
-            if (damage < 0)
-                damage = 0;
-            if (stats.dodged.get())
-                damage = 0;
-            if (stats.blocked.get())
-                damage = 0;
-            if (source != null) {
-                if (stats.reflected.get()) {
-                    IlsMod.info(living, "%s §dhit you, but you reflected.§r", source.getName());
-                } else if (stats.dodged.get() && !(source instanceof EntityPlayer)) {
-                    IlsMod.info(living, "%s §dhit you, but you dodged.§r", source.getName());
-                } else if (stats.blocked.get()) {
-                    Potion potion = Potion.getPotionById(2);
-                    player.addPotionEffect(new PotionEffect(potion, 30, IlsConfig.blockSlowLevel, true, true));
-                    IlsMod.info(living, "%s §dhit you, but you blocked.§r", source.getName());
+        if (source instanceof EntityLivingBase) {
+            EntityLivingBase source1 = (EntityLivingBase) source;
+            Stats stats = new Stats(source1);
+            if (source instanceof EntityPlayer) {
+                EntityPlayer source2 = (EntityPlayer) source;
+                if (living instanceof EntityPlayer) {
+                    EntityPlayer living2 = (EntityPlayer) living;
+                    stats.apply(source2, living2, event);
                 } else
-                    IlsMod.info(living, "%s §dhit you for §6%.2f §ddamage.§r", source.getName(), damage);
-            }
-            if (source instanceof EntityLivingBase && stats.reflected.get()) {
-                EntityLivingBase enemy = (EntityLivingBase) source;
-                double health = enemy.getHealth();
-                health -= damage;
-                if (health < 0)
-                    health = 0;
-                enemy.setHealth((float) health);
-                damage = 0;
-            }
-            damage = damage * player.getMaxHealth() / stats.health;
-            event.setAmount((float) damage);
-            if (stats.slown.get() && source instanceof EntityLivingBase) {
-                EntityLivingBase enemy = (EntityLivingBase) source;
-                enemy.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 60, IlsConfig.slowLevel, true, true));
-            }
-            if (stats.poisoned.get() && source instanceof EntityLivingBase) {
-                EntityLivingBase enemy = (EntityLivingBase) source;
-                enemy.addPotionEffect(
-                        new PotionEffect(Potion.getPotionById(19), 60, IlsConfig.poisonLevel, true, true));
+                    stats.apply(source2, living, event);
+            } else if (living instanceof EntityPlayer) {
+                EntityPlayer living1 = (EntityPlayer) living;
+                stats.apply(source1, living1, event);
+            } else
+                stats.apply(source1, living, event);
+        } else {
+            Stats stats = new Stats(living);
+            if (living instanceof EntityPlayer) {
+                EntityPlayer living1 = (EntityPlayer) living;
+                stats.apply(source, living1, event);
             }
         }
     }
@@ -158,12 +98,9 @@ public abstract class CommonProxy {
         if (living.world.isRemote)
             return;
         IlsMod.info("healevent: %s %f", living == null ? "null" : living.getName(), event.getAmount());
-        if (living instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) living;
-            Stats stats = new Stats(player);
-            double heal = event.getAmount() * player.getMaxHealth() / stats.health;
-            event.setAmount((float) heal);
-        }
+        Stats stats = new Stats(living);
+        double heal = event.getAmount() * living.getMaxHealth() / stats.health;
+        event.setAmount((float) heal);
     }
 
     @SubscribeEvent
@@ -184,12 +121,8 @@ public abstract class CommonProxy {
         int tick = TICKS.compute(player.getUniqueID(), ($, t) -> t == null ? 1 : t + 1);
         if (tick % 20 == 0) {
             Stats stats = new Stats(player);
-            double health = player.getHealth() + stats.regeneration * player.getMaxHealth() / 100;
-            if (health < 0)
-                health = 0;
-            if (player.getMaxHealth() < health)
-                health = player.getMaxHealth();
-            player.setHealth((float) health);
+            double amount = stats.regeneration * player.getMaxHealth() / 100;
+            player.heal((float) amount);
         }
     }
 }
