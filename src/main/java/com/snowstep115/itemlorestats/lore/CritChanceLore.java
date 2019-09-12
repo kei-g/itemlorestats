@@ -20,13 +20,11 @@ public final class CritChanceLore extends Lore {
 
     @Override
     public void applyTo(Stats stats) {
-        stats.criticalChance += this.possibility;
+        stats.critical.increase(this.possibility);
     }
 
     @Override
     public String getFormattedString() {
-        if (0 < this.possibility)
-            return String.format("%s +%.2f%%", getLocalizedName(), this.possibility);
-        return String.format("%s %.2f%%", getLocalizedName(), this.possibility);
+        return String.format(this.possibility <= 0 ? "%s %.2f%%" : "%s +%.2f%%", getLocalizedName(), this.possibility);
     }
 }

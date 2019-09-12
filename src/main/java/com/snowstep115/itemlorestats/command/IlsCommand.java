@@ -110,21 +110,21 @@ public final class IlsCommand extends CommandBase {
         case "stats":
             Stats stats = new Stats(mp);
             IlsMod.info(mp, "%s: %.2f-%.2f", new DamageLore().getStatsName(), stats.damageMin, stats.damageMax);
-            IlsMod.info(mp, "%s: %.2f%%", new ArmourLore().getStatsName(), stats.reduction);
-            IlsMod.info(mp, "%s: %.2f%%", new DodgeLore().getStatsName(), stats.dodge);
-            IlsMod.info(mp, "%s: %.2f%%", new BlockLore().getStatsName(), stats.block);
-            IlsMod.info(mp, "%s: %.2f%%", new CritChanceLore().getStatsName(), stats.criticalChance);
+            IlsMod.info(mp, "%s: %s", new ArmourLore().getStatsName(), stats.reduction);
+            IlsMod.info(mp, "%s: %s", new DodgeLore().getStatsName(), stats.dodge);
+            IlsMod.info(mp, "%s: %s", new BlockLore().getStatsName(), stats.block);
+            IlsMod.info(mp, "%s: %s", new CritChanceLore().getStatsName(), stats.critical);
             IlsMod.info(mp, "%s: %.2f%%", new CritDamageLore().getStatsName(),
                     stats.criticalDamage - IlsConfig.baseCriticalDamage);
             IlsMod.info(mp, "%s: %.2f/%.2f", new HealthLore().getStatsName(),
                     mp.getHealth() * stats.health / mp.getMaxHealth(), stats.health);
             IlsMod.info(mp, "%s: %.2f%%", new HealthRegenLore().getStatsName(), stats.regeneration);
-            IlsMod.info(mp, "%s: %.2f%%", new LifeStealLore().getStatsName(), stats.lifeSteal);
-            IlsMod.info(mp, "%s: %.2f%%", new IgnitionLore().getStatsName(), stats.ignition);
-            IlsMod.info(mp, "%s: %.2f%%", new ReflectLore().getStatsName(), stats.reflection);
-            IlsMod.info(mp, "%s: %.2f%%", new SlowLore().getStatsName(), stats.slowness);
-            IlsMod.info(mp, "%s: %.2f%%", new PoisonLore().getStatsName(), stats.poison);
-            IlsMod.info(mp, "%s: %.2f%%", new WitherLore().getStatsName(), stats.wither);
+            IlsMod.info(mp, "%s: %s", new LifeStealLore().getStatsName(), stats.lifeSteal);
+            IlsMod.info(mp, "%s: %s", new IgnitionLore().getStatsName(), stats.ignition);
+            IlsMod.info(mp, "%s: %s", new ReflectLore().getStatsName(), stats.reflection);
+            IlsMod.info(mp, "%s: %s", new SlowLore().getStatsName(), stats.slowness);
+            IlsMod.info(mp, "%s: %s", new PoisonLore().getStatsName(), stats.poison);
+            IlsMod.info(mp, "%s: %s", new WitherLore().getStatsName(), stats.wither);
             IlsMod.info(mp, "%s: %.2f%%", new SpeedLore().getStatsName(), stats.speed);
             break;
         }
