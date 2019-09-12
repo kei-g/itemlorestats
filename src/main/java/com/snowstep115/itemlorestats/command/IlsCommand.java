@@ -121,7 +121,7 @@ public final class IlsCommand extends CommandBase {
             }
             break;
         case "stats":
-            Stats stats = new Stats(mp);
+            Stats stats = Stats.strictStats(mp);
             IlsMod.info(mp, "%s: %.2f-%.2f", new DamageLore().getStatsName(), stats.damageMin, stats.damageMax);
             IlsMod.info(mp, "%s: %s", new ArmourLore().getStatsName(), stats.reduction);
             IlsMod.info(mp, "%s: %s", new DodgeLore().getStatsName(), stats.dodge);

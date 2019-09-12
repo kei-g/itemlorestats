@@ -15,6 +15,10 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
 public final class Stats {
+    public static Stats strictStats(EntityLivingBase living) {
+        return new Stats(living, new Stats(living));
+    }
+
     public final Probabilistic blind = new Probabilistic();
     public final Probabilistic block = new Probabilistic();
     public final Probabilistic critical = new Probabilistic();
@@ -43,6 +47,25 @@ public final class Stats {
     public Stats(EntityLivingBase living) {
         this.health = living.getMaxHealth();
         Lore.deserialize(living, lore -> lore.applyTo(this));
+    }
+
+    public Stats(EntityLivingBase living, Stats stats) {
+        this.health = living.getMaxHealth();
+        if (living instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) living;
+            for (ItemStack equip : living.getEquipmentAndArmor())
+                if (stats.level.containsKey(equip) && player.experienceLevel < stats.level.get(equip))
+                    IlsMod.info(player, "§d%s requires %d level§r", equip.getDisplayName(), stats.level.get(equip));
+                else if (stats.soulbound.containsKey(equip) && !player.getName().equals(stats.soulbound.get(equip)))
+                    IlsMod.info(player, "§d%s is bound to §r%s", equip.getDisplayName(), stats.soulbound.get(equip));
+                else
+                    Lore.deserialize(living, equip, lore -> lore.applyTo(this));
+        } else
+            for (ItemStack equip : living.getEquipmentAndArmor())
+                if (stats.soulbound.containsKey(equip) && !living.getName().equals(stats.soulbound.get(equip)))
+                    ;
+                else
+                    Lore.deserialize(living, equip, lore -> lore.applyTo(this));
     }
 
     public void apply(Entity source, EntityLivingBase living, LivingDamageEvent event) {

@@ -18,6 +18,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -56,7 +57,7 @@ public abstract class CommonProxy {
             return;
         if (source instanceof EntityLivingBase) {
             EntityLivingBase source1 = (EntityLivingBase) source;
-            Stats stats = new Stats(source1);
+            Stats stats = Stats.strictStats(source1);
             if (source instanceof EntityPlayer) {
                 EntityPlayer source2 = (EntityPlayer) source;
                 if (living instanceof EntityPlayer) {
@@ -70,7 +71,7 @@ public abstract class CommonProxy {
             } else
                 stats.apply(source1, living, event);
         } else {
-            Stats stats = new Stats(living);
+            Stats stats = Stats.strictStats(living);
             if (living instanceof EntityPlayer) {
                 EntityPlayer living1 = (EntityPlayer) living;
                 stats.apply(source, living1, event);
@@ -98,26 +99,20 @@ public abstract class CommonProxy {
         Stats stats = new Stats(living);
         if (living instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) living;
-            if (stats.level.containsKey(event.getTo()) && player.experienceLevel < stats.level.get(event.getTo())) {
-                IlsMod.info(living, "§dRequires %d level§r", stats.level.get(event.getTo()));
-                event.getSlot().getSlotType();
-                IlsMod.sendTo(player, new PreventWearingMessage(
-                        event.getSlot().equals(EntityEquipmentSlot.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND,
-                        event.getTo(), event.getSlot()));
-            }
-            if (stats.soulbound.containsKey(event.getTo())
-                    && !player.getName().equals(stats.soulbound.get(event.getTo()))) {
-                IlsMod.info(living, "§dBound to §r%s", stats.soulbound.get(event.getTo()));
-                IlsMod.sendTo(player, new PreventWearingMessage(
-                        event.getSlot().equals(EntityEquipmentSlot.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND,
-                        event.getTo(), event.getSlot()));
-            }
+            ItemStack equip = event.getTo();
+            EnumHand hand = event.getSlot().equals(EntityEquipmentSlot.MAINHAND) ? EnumHand.MAIN_HAND
+                    : EnumHand.OFF_HAND;
+            if (stats.level.containsKey(equip) && player.experienceLevel < stats.level.get(equip))
+                IlsMod.sendTo(player, new PreventWearingMessage(hand, equip, event.getSlot()));
+            else if (stats.soulbound.containsKey(equip) && !player.getName().equals(stats.soulbound.get(equip)))
+                IlsMod.sendTo(player, new PreventWearingMessage(hand, equip, event.getSlot()));
         }
+        Stats actualStats = new Stats(living, stats);
         AbstractAttributeMap attr = living.getAttributeMap();
         Multimap<String, AttributeModifier> modifiers = ArrayListMultimap.create();
         modifiers.put("generic.movementSpeed",
                 new AttributeModifier(UUID.fromString("91AEAA56-376B-4498-935B-2F7F68070635"), "generic.movementSpeed",
-                        stats.speed / 100, 2));
+                        actualStats.speed / 100, 2));
         attr.applyAttributeModifiers(modifiers);
     }
 
@@ -126,7 +121,7 @@ public abstract class CommonProxy {
         EntityLivingBase living = event.getEntityLiving();
         if (living.world.isRemote)
             return;
-        Stats stats = new Stats(living);
+        Stats stats = Stats.strictStats(living);
         double health = event.getAmount() * living.getMaxHealth() / stats.health;
         if (Double.isNaN(health))
             event.setAmount(0);
@@ -146,7 +141,7 @@ public abstract class CommonProxy {
             event.setAmount(0);
         else if (Float.isInfinite(event.getAmount()))
             return;
-        Stats stats = new Stats(living);
+        Stats stats = Stats.strictStats(living);
         double damage = event.getAmount() * living.getMaxHealth() / stats.health;
         if (Double.isNaN(damage))
             event.setAmount(0);
@@ -164,7 +159,7 @@ public abstract class CommonProxy {
         EntityXPOrb orb = event.getOrb();
         if (orb == null)
             return;
-        Stats stats = new Stats(player);
+        Stats stats = Stats.strictStats(player);
         double xp = orb.xpValue;
         xp += xp * stats.xpBonus / 100;
         orb.xpValue = (int) xp;
@@ -179,7 +174,7 @@ public abstract class CommonProxy {
             return;
         int tick = TICKS.compute(player.getUniqueID(), ($, t) -> t == null ? 1 : t + 1);
         if (tick % 20 == 0) {
-            Stats stats = new Stats(player);
+            Stats stats = Stats.strictStats(player);
             double amount = stats.regeneration * player.getMaxHealth() / 100;
             if (Double.isNaN(amount))
                 player.heal(0);
