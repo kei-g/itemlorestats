@@ -17,6 +17,8 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -93,20 +95,22 @@ public abstract class CommonProxy {
         if (living.world.isRemote)
             return;
         IlsMod.info("equipmentchangeevent: %s %s -> %s", living.getName(), event.getFrom(), event.getTo());
-        IlsMod.info(living, "type=%s, index=%d, slotIndex=%d", event.getSlot().getSlotType(),
-                event.getSlot().getIndex(), event.getSlot().getSlotIndex());
         Stats stats = new Stats(living);
         if (living instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) living;
             if (stats.level.containsKey(event.getTo()) && player.experienceLevel < stats.level.get(event.getTo())) {
                 IlsMod.info(living, "§dRequires %d level§r", stats.level.get(event.getTo()));
                 event.getSlot().getSlotType();
-                IlsMod.sendTo(player, new PreventWearingMessage(event.getTo(), event.getSlot()));
+                IlsMod.sendTo(player, new PreventWearingMessage(
+                        event.getSlot().equals(EntityEquipmentSlot.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND,
+                        event.getTo(), event.getSlot()));
             }
             if (stats.soulbound.containsKey(event.getTo())
                     && !player.getName().equals(stats.soulbound.get(event.getTo()))) {
                 IlsMod.info(living, "§dBound to §r%s", stats.soulbound.get(event.getTo()));
-                IlsMod.sendTo(player, new PreventWearingMessage(event.getTo(), event.getSlot()));
+                IlsMod.sendTo(player, new PreventWearingMessage(
+                        event.getSlot().equals(EntityEquipmentSlot.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND,
+                        event.getTo(), event.getSlot()));
             }
         }
         AbstractAttributeMap attr = living.getAttributeMap();
