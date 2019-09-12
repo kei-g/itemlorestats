@@ -2,7 +2,7 @@ package com.snowstep115.itemlorestats.util;
 
 public final class StringUtil {
     public static String[] decompose(String value) {
-        int index = value.indexOf(' ');
+        int index = value.lastIndexOf(' ');
         String[] comps = new String[2];
         comps[0] = index < 0 ? value : value.substring(0, index);
         comps[1] = index < 0 ? "" : value.substring(index + 1);
