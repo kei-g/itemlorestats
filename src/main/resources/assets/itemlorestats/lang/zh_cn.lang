@@ -15,6 +15,7 @@ text.reflectlore.name=荆棘
 text.speedlore.name=移动速度
 text.slowlore.name=减速
 text.poisonlore.name=中毒
+text.witherlore.name=凋零攻击
 
 config.itemlorestats.base_critical_damage.name=Base Crit Damage(%%)
 config.itemlorestats.block_slow_level.name=Effective Slow Level on Block

@@ -28,6 +28,7 @@ public final class Stats {
     public double regeneration;
     public double slowness;
     public double speed;
+    public double wither;
 
     public Stats(EntityLivingBase living) {
         this.health = living.getMaxHealth();
@@ -42,6 +43,7 @@ public final class Stats {
     public final Lazy<Boolean> poisoned = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.poison);
     public final Lazy<Boolean> reflected = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.reflection);
     public final Lazy<Boolean> slown = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.slowness);
+    public final Lazy<Boolean> withered = new Lazy<>(() -> IlsMod.SEED.nextDouble() * 100 <= this.wither);
 
     public void apply(Entity source, EntityLivingBase living, LivingDamageEvent event) {
         Stats stats = new Stats(living);
@@ -121,6 +123,8 @@ public final class Stats {
             living.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 60, IlsConfig.slowLevel, true, true));
         if (this.poisoned.get())
             living.addPotionEffect(new PotionEffect(Potion.getPotionById(19), 60, IlsConfig.poisonLevel, true, true));
+        if (this.withered.get())
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(20), 60, IlsConfig.witherLevel, true, true));
     }
 
     public void apply(EntityLivingBase source, EntityPlayer living, LivingDamageEvent event) {
@@ -180,6 +184,8 @@ public final class Stats {
             source.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 60, IlsConfig.slowLevel, true, true));
         if (stats.poisoned.get())
             source.addPotionEffect(new PotionEffect(Potion.getPotionById(19), 60, IlsConfig.poisonLevel, true, true));
+        if (stats.withered.get())
+            source.addPotionEffect(new PotionEffect(Potion.getPotionById(20), 60, IlsConfig.witherLevel, true, true));
     }
 
     public void apply(EntityPlayer source, EntityPlayer living, LivingDamageEvent event) {

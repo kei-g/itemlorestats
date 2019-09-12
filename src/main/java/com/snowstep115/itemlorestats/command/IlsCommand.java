@@ -20,6 +20,7 @@ import com.snowstep115.itemlorestats.lore.ReflectLore;
 import com.snowstep115.itemlorestats.lore.SlowLore;
 import com.snowstep115.itemlorestats.lore.SpeedLore;
 import com.snowstep115.itemlorestats.lore.Stats;
+import com.snowstep115.itemlorestats.lore.WitherLore;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -58,7 +59,7 @@ public final class IlsCommand extends CommandBase {
         switch (subcommand) {
         case "createlore":
             addLoreItem(mp, Items.IRON_SWORD, new DamageLore(), new CritChanceLore(), new CritDamageLore(),
-                    new LifeStealLore(), new IgnitionLore(), new SlowLore(), new PoisonLore());
+                    new LifeStealLore(), new IgnitionLore(), new SlowLore(), new PoisonLore(), new WitherLore());
             addLoreItem(mp, Items.LEATHER_HELMET, new ArmourLore(), new BlockLore(), new DodgeLore(), new HealthLore(),
                     new HealthRegenLore());
             addLoreItem(mp, Items.LEATHER_CHESTPLATE, new ArmourLore(), new BlockLore(), new DodgeLore(),
@@ -123,6 +124,7 @@ public final class IlsCommand extends CommandBase {
             IlsMod.info(mp, "%s: %.2f%%", new ReflectLore().getStatsName(), stats.reflection);
             IlsMod.info(mp, "%s: %.2f%%", new SlowLore().getStatsName(), stats.slowness);
             IlsMod.info(mp, "%s: %.2f%%", new PoisonLore().getStatsName(), stats.poison);
+            IlsMod.info(mp, "%s: %.2f%%", new WitherLore().getStatsName(), stats.wither);
             IlsMod.info(mp, "%s: %.2f%%", new SpeedLore().getStatsName(), stats.speed);
             break;
         }

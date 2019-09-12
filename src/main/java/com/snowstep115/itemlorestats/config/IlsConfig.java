@@ -33,6 +33,10 @@ public class IlsConfig {
     @RangeInt(min = 1, max = 31)
     public static int poisonLevel = 3;
 
+    @LangKey("config.itemlorestats.wither_level.name")
+    @RangeInt(min = 1, max = 31)
+    public static int witherLevel = 1;
+
     @EventBusSubscriber
     static class ConfigSubscriber {
         @SubscribeEvent

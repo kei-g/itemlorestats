@@ -105,6 +105,8 @@ public abstract class Lore {
                     return new SlowLore(comps[1]);
                 case "text.speedlore.name":
                     return new SpeedLore(comps[1]);
+                case "text.witherlore.name":
+                    return new WitherLore(comps[1]);
                 }
             } while (true);
         });
