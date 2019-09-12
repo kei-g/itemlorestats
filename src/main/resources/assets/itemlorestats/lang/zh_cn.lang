@@ -22,3 +22,4 @@ config.itemlorestats.block_slow_level.name=Effective Slow Level on Block
 config.itemlorestats.life_steal.name=Life Steal(%%)
 config.itemlorestats.slow_level.name=Effective Slow Level
 config.itemlorestats.poison_level.name=Effective Poison Level
+config.itemlorestats.wither_level.name=Effective Wither Level

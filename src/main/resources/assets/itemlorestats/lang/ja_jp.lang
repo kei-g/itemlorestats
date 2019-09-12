@@ -22,3 +22,4 @@ config.itemlorestats.block_slow_level.name=ブロック時の減速効果レベ�
 config.itemlorestats.life_steal.name=体力吸収率(%%)
 config.itemlorestats.slow_level.name=スロー発動時の効果レベル
 config.itemlorestats.poison_level.name=毒発動時の効果レベル
+config.itemlorestats.wither_level.name=ウィザー発動時の効果レベル
