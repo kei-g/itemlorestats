@@ -36,20 +36,18 @@ public final class Stats {
     }
 
     public void apply(Entity source, EntityLivingBase living, LivingDamageEvent event) {
-        Stats stats = new Stats(living);
-        double damage = event.getAmount() - event.getAmount() * stats.reduction / 100;
+        double damage = event.getAmount() - event.getAmount() * this.reduction / 100;
         if (damage < 0)
             damage = 0;
-        damage = damage * living.getMaxHealth() / stats.health;
+        damage = damage * living.getMaxHealth() / this.health;
         event.setAmount((float) damage);
     }
 
     public void apply(Entity source, EntityPlayer living, LivingDamageEvent event) {
-        Stats stats = new Stats(living);
-        double damage = event.getAmount() - event.getAmount() * stats.reduction / 100;
+        double damage = event.getAmount() - event.getAmount() * this.reduction / 100;
         if (damage < 0)
             damage = 0;
-        damage = damage * living.getMaxHealth() / stats.health;
+        damage = damage * living.getMaxHealth() / this.health;
         event.setAmount((float) damage);
     }
 

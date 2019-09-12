@@ -43,6 +43,7 @@ public abstract class CommonProxy {
         if (living.world.isRemote)
             return;
         Entity source = event.getSource().getTrueSource();
+        IlsMod.info(living, "damageevent: %s -> %f", source == null ? "null" : source.getName(), event.getAmount());
         if (source instanceof EntityLivingBase) {
             EntityLivingBase source1 = (EntityLivingBase) source;
             Stats stats = new Stats(source1);
