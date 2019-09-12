@@ -103,7 +103,7 @@ public final class IlsCommand extends CommandBase {
                         break;
                     value = value.substring(0, index) + value.substring(index + 1);
                 } while (true);
-                Lore lore = Lore.parse(value);
+                Lore lore = Lore.parse(mp2, equip, value);
                 if (lore == null) {
                     IlsMod.info(mp, "No lore is found for %s", value);
                     return;

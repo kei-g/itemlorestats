@@ -88,6 +88,17 @@ public abstract class CommonProxy {
             return;
         IlsMod.info("equipmentchangeevent: %s %s -> %s", living.getName(), event.getFrom(), event.getTo());
         Stats stats = new Stats(living);
+        if (living instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) living;
+            if (stats.level.containsKey(event.getTo()) && player.experienceLevel < stats.level.get(event.getTo())) {
+                IlsMod.info(living, "§dRequires %d level§r", stats.level.get(event.getTo()));
+                // XXX: TODO - Prevent wearing/holding this item.
+            }
+            if (stats.soulbound.containsKey(event.getTo()) && !player.getName().equals(stats.soulbound.get(event.getTo()))) {
+                IlsMod.info(living, "§dBound to §r%s", stats.soulbound.get(event.getTo()));
+                // XXX: TODO - Prevent wearing/holding this item.
+            }
+        }
         AbstractAttributeMap attr = living.getAttributeMap();
         Multimap<String, AttributeModifier> modifiers = ArrayListMultimap.create();
         modifiers.put("generic.movementSpeed",

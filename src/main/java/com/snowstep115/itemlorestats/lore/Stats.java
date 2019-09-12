@@ -1,5 +1,7 @@
 package com.snowstep115.itemlorestats.lore;
 
+import java.util.HashMap;
+
 import com.snowstep115.itemlorestats.IlsMod;
 import com.snowstep115.itemlorestats.config.IlsConfig;
 import com.snowstep115.itemlorestats.util.Probabilistic;
@@ -7,6 +9,7 @@ import com.snowstep115.itemlorestats.util.Probabilistic;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -25,12 +28,14 @@ public final class Stats {
     public final Probabilistic harming = new Probabilistic();
     public double health;
     public final Probabilistic ignition = new Probabilistic();
+    public final HashMap<ItemStack, Integer> level = new HashMap<>();
     public final Probabilistic lifeSteal = new Probabilistic();
     public final Probabilistic poison = new Probabilistic();
     public double reduction;
     public final Probabilistic reflection = new Probabilistic();
     public double regeneration;
     public final Probabilistic slowness = new Probabilistic();
+    public final HashMap<ItemStack, String> soulbound = new HashMap<>();
     public double speed;
     public final Probabilistic wither = new Probabilistic();
     public double xpBonus;

@@ -27,17 +27,17 @@ public abstract class Lore {
         return lore -> list.appendTag(new NBTTagString(lore.getFormattedString()));
     }
 
-    public static void deserialize(NBTTagList list, Consumer<Lore> consumer) {
+    public static void deserialize(EntityLivingBase living, ItemStack itemstack, NBTTagList list, Consumer<Lore> consumer) {
         for (int i = 0; i < list.tagCount(); i++) {
             String description = list.getStringTagAt(i);
-            Lore lore = Lore.parse(description);
+            Lore lore = Lore.parse(living, itemstack, description);
             if (lore == null)
                 continue;
             consumer.accept(lore);
         }
     }
 
-    public static void deserialize(NBTTagCompound tag, Consumer<Lore> consumer) {
+    public static void deserialize(EntityLivingBase living, ItemStack itemstack, NBTTagCompound tag, Consumer<Lore> consumer) {
         if (tag == null)
             return;
         if (!tag.hasKey("display"))
@@ -46,20 +46,20 @@ public abstract class Lore {
         if (!display.hasKey("Lore"))
             return;
         NBTTagList lore = display.getTagList("Lore", NBT.TAG_STRING);
-        Lore.deserialize(lore, consumer);
+        Lore.deserialize(living, itemstack, lore, consumer);
     }
 
-    public static void deserialize(ItemStack itemstack, Consumer<Lore> consumer) {
+    public static void deserialize(EntityLivingBase living, ItemStack itemstack, Consumer<Lore> consumer) {
         NBTTagCompound tag = itemstack.getTagCompound();
-        Lore.deserialize(tag, consumer);
+        Lore.deserialize(living, itemstack, tag, consumer);
     }
 
     public static void deserialize(EntityLivingBase living, Consumer<Lore> consumer) {
         for (ItemStack equip : living.getEquipmentAndArmor())
-            Lore.deserialize(equip, consumer);
+            Lore.deserialize(living, equip, consumer);
     }
 
-    public static Lore parse(String description) {
+    public static Lore parse(EntityLivingBase living, ItemStack itemstack, String description) {
         String[] comps = StringUtil.decompose(description);
         StringUtil.undecorate(comps);
         return ResourceUtil.enumerateResources("assets/itemlorestats/lang/", ".lang", br -> {
@@ -99,6 +99,8 @@ public abstract class Lore {
                     return new HealthRegenLore(comps[1]);
                 case "text.ignitionlore.name":
                     return new IgnitionLore(comps[1]);
+                case "text.levellore.name":
+                    return new LevelLore(itemstack, comps[1]);
                 case "text.lifesteallore.name":
                     return new LifeStealLore(comps[1]);
                 case "text.poisonlore.name":
@@ -111,6 +113,8 @@ public abstract class Lore {
                     return new ReflectLore(comps[1]);
                 case "text.slowlore.name":
                     return new SlowLore(comps[1]);
+                case "text.soulboundlore.name":
+                    return new BoundToLore(itemstack, comps[1]);
                 case "text.speedlore.name":
                     return new SpeedLore(comps[1]);
                 case "text.witherlore.name":
