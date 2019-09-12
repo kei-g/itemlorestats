@@ -46,6 +46,10 @@ public abstract class CommonProxy {
             return;
         Entity source = event.getSource().getTrueSource();
         IlsMod.info("damageevent: %s -> %f", source == null ? "null" : source.getName(), event.getAmount());
+        if (Float.isNaN(event.getAmount()))
+            event.setAmount(0);
+        else if (Float.isInfinite(event.getAmount()))
+            return;
         if (source instanceof EntityLivingBase) {
             EntityLivingBase source1 = (EntityLivingBase) source;
             Stats stats = new Stats(source1);
@@ -94,7 +98,8 @@ public abstract class CommonProxy {
                 IlsMod.info(living, "§dRequires %d level§r", stats.level.get(event.getTo()));
                 // XXX: TODO - Prevent wearing/holding this item.
             }
-            if (stats.soulbound.containsKey(event.getTo()) && !player.getName().equals(stats.soulbound.get(event.getTo()))) {
+            if (stats.soulbound.containsKey(event.getTo())
+                    && !player.getName().equals(stats.soulbound.get(event.getTo()))) {
                 IlsMod.info(living, "§dBound to §r%s", stats.soulbound.get(event.getTo()));
                 // XXX: TODO - Prevent wearing/holding this item.
             }
@@ -113,8 +118,13 @@ public abstract class CommonProxy {
         if (living.world.isRemote)
             return;
         Stats stats = new Stats(living);
-        double heal = event.getAmount() * living.getMaxHealth() / stats.health;
-        event.setAmount((float) heal);
+        double health = event.getAmount() * living.getMaxHealth() / stats.health;
+        if (Double.isNaN(health))
+            event.setAmount(0);
+        else if (Double.isInfinite(health))
+            event.setAmount(living.getMaxHealth());
+        else
+            event.setAmount((float) health);
     }
 
     @SubscribeEvent
@@ -123,9 +133,18 @@ public abstract class CommonProxy {
         if (living.world.isRemote)
             return;
         IlsMod.info("hurtevent: %s %f", living.getName(), event.getAmount());
+        if (Float.isNaN(event.getAmount()))
+            event.setAmount(0);
+        else if (Float.isInfinite(event.getAmount()))
+            return;
         Stats stats = new Stats(living);
         double damage = event.getAmount() * living.getMaxHealth() / stats.health;
-        event.setAmount((float) damage);
+        if (Double.isNaN(damage))
+            event.setAmount(0);
+        else if (Double.isInfinite(damage))
+            event.setAmount(living.getHealth());
+        else
+            event.setAmount((float) damage);
     }
 
     @SubscribeEvent
@@ -153,7 +172,12 @@ public abstract class CommonProxy {
         if (tick % 20 == 0) {
             Stats stats = new Stats(player);
             double amount = stats.regeneration * player.getMaxHealth() / 100;
-            player.heal((float) amount);
+            if (Double.isNaN(amount))
+                player.heal(0);
+            else if (Double.isInfinite(amount))
+                player.heal(player.getMaxHealth());
+            else
+                player.heal((float) amount);
         }
     }
 }
