@@ -52,6 +52,8 @@ public final class IlsCommand extends CommandBase {
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         EntityPlayerMP mp = (EntityPlayerMP) sender;
+        if (args.length < 1)
+            return;
         String subcommand = args[0];
         switch (subcommand) {
         case "createlore":
@@ -65,6 +67,44 @@ public final class IlsCommand extends CommandBase {
                     new HealthLore(), new HealthRegenLore());
             addLoreItem(mp, Items.LEATHER_BOOTS, new ArmourLore(), new BlockLore(), new DodgeLore(), new HealthLore(),
                     new HealthRegenLore(), new SpeedLore());
+            break;
+        case "lore":
+            if (args.length < 2)
+                IlsMod.info(mp, "<player_name> is not specified.");
+            else if (args.length < 3)
+                IlsMod.info(mp, "<line#> is not specified.");
+            else if (args.length < 4)
+                IlsMod.info(mp, "<text> is not specified.");
+            else {
+                EntityPlayerMP mp2 = IlsMod.INSTANCE.getPlayerByUsername(args[1]);
+                if (mp2 == null) {
+                    IlsMod.info(mp, "%s does not exist", args[1]);
+                    return;
+                }
+                ItemStack equip = mp2.getHeldItemMainhand();
+                if (equip.isEmpty()) {
+                    IlsMod.info(mp, "%s does not have any item on mainhand", args[1]);
+                    return;
+                }
+                String[] comps = new String[args.length - 2];
+                for (int i = 0; i < args.length - 2; i++)
+                    comps[i] = args[2 + i];
+                String value = String.join(" ", comps);
+                do {
+                    int index = value.indexOf('"');
+                    if (index < 0)
+                        break;
+                    value = value.substring(0, index) + value.substring(index + 1);
+                } while (true);
+                Lore lore = Lore.parse(value);
+                if (lore == null) {
+                    IlsMod.info(mp, "No lore is found for %s", value);
+                    return;
+                }
+                Consumer<Lore> add = Lore.addDisplayLore(equip);
+                add.accept(lore);
+                IlsMod.info(mp2, "You are given %s lore by %s.", value, mp.getName());
+            }
             break;
         case "stats":
             Stats stats = new Stats(mp);

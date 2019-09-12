@@ -15,6 +15,8 @@ import org.apache.logging.log4j.Logger;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -82,6 +84,12 @@ public final class IlsMod {
         IlsMod.info("%s", sw.toString());
     }
 
+    private MinecraftServer server;
+
+    public EntityPlayerMP getPlayerByUsername(String username) {
+        return this.server.getPlayerList().getPlayerByUsername(username);
+    }
+
     @EventHandler
     public void preInit(final FMLPreInitializationEvent event) {
         PROXY.preInit(event);
@@ -100,6 +108,7 @@ public final class IlsMod {
     @EventHandler
     public void serverStarting(final FMLServerStartingEvent event) {
         event.registerServerCommand(new IlsCommand());
+        this.server = event.getServer();
     }
 
     @EventHandler
