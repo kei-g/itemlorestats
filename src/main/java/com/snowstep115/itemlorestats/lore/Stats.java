@@ -62,6 +62,9 @@ public final class Stats {
         double damage = this.damage;
         if (this.critical.get())
             damage = damage * this.criticalDamage / 100;
+        damage -= living.getTotalArmorValue();
+        if (damage < 0)
+            damage = 0;
         event.setAmount((float) damage);
         if (this.critical.get())
             IlsMod.info(source, "§dYou crit hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), damage);
@@ -92,7 +95,10 @@ public final class Stats {
 
     public void apply(EntityLivingBase source, EntityPlayer living, LivingDamageEvent event) {
         Stats stats = new Stats(living);
-        double damage = event.getAmount() - event.getAmount() * stats.reduction / 100;
+        double damage = event.getAmount() - living.getTotalArmorValue();
+        if (damage < 0)
+            damage = 0;
+        damage -= damage * stats.reduction / 100;
         if (damage < 0)
             damage = 0;
         if (stats.dodged.get())
