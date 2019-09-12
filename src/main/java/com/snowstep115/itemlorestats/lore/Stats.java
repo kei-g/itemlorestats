@@ -72,7 +72,6 @@ public final class Stats {
         double damage = event.getAmount() - event.getAmount() * this.reduction / 100;
         if (damage < 0)
             damage = 0;
-        damage = damage * living.getMaxHealth() / this.health;
         event.setAmount((float) damage);
     }
 
@@ -80,7 +79,6 @@ public final class Stats {
         double damage = event.getAmount() - event.getAmount() * this.reduction / 100;
         if (damage < 0)
             damage = 0;
-        damage = damage * living.getMaxHealth() / this.health;
         event.setAmount((float) damage);
     }
 
@@ -100,11 +98,10 @@ public final class Stats {
                 IlsMod.info(source, "§dYou crit hit a §f%s§d but reflected.§r", living.getName());
             else
                 IlsMod.info(source, "§dYou hit a §f%s§d but reflected.§r", living.getName());
-            double health = source.getHealth() * this.health / source.getMaxHealth();
+            double health = source.getHealth();
             health -= damage;
             if (health < 0)
                 health = 0;
-            health = health * source.getMaxHealth() / this.health;
             source.setHealth((float) health);
             damage = 0;
         } else if (stats.dodge.occurred()) {
@@ -128,15 +125,13 @@ public final class Stats {
             if (this.lifeSteal.occurred()) {
                 double stolen = damage * IlsConfig.lifeSteal / 100;
                 IlsMod.info(source, "§dYou stole §6%.2f §dhealth.§r", stolen);
-                double health = this.health * source.getHealth() / source.getMaxHealth();
+                double health = source.getHealth();
                 health += stolen;
-                if (this.health <= health)
-                    health = this.health;
-                health = health * source.getMaxHealth() / this.health;
+                if (source.getMaxHealth() < health)
+                    health = source.getMaxHealth();
                 source.setHealth((float) health);
             }
         }
-        damage = damage * living.getMaxHealth() / stats.health;
         event.setAmount((float) damage);
         if (this.blind.occurred())
             living.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 60, IlsConfig.blindLevel, true, true));
@@ -165,11 +160,10 @@ public final class Stats {
                 IlsMod.info(living, "%s §dcrit hit you, but you reflected.§r", source.getName());
             else
                 IlsMod.info(living, "%s §dhit you, but you reflected.§r", source.getName());
-            double health = source.getHealth() * this.health / source.getMaxHealth();
+            double health = source.getHealth();
             health -= damage;
             if (health < 0)
                 health = 0;
-            health = health * source.getMaxHealth() / this.health;
             source.setHealth((float) health);
             damage = 0;
         } else if (stats.dodge.occurred()) {
@@ -193,15 +187,13 @@ public final class Stats {
             if (this.lifeSteal.occurred()) {
                 double stolen = damage * IlsConfig.lifeSteal / 100;
                 IlsMod.info(source, "§d%s stole §6%.2f §dhealth.§r", source.getName(), stolen);
-                double health = this.health * source.getHealth() / source.getMaxHealth();
+                double health = source.getHealth();
                 health += stolen;
-                if (this.health <= health)
-                    health = this.health;
-                health = health * source.getMaxHealth() / this.health;
+                if (source.getMaxHealth() < health)
+                    health = source.getMaxHealth();
                 source.setHealth((float) health);
             }
         }
-        damage = damage * living.getMaxHealth() / stats.health;
         event.setAmount((float) damage);
         if (this.blind.occurred())
             living.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 60, IlsConfig.blindLevel, true, true));
@@ -231,11 +223,10 @@ public final class Stats {
                 IlsMod.info(source, "§dYou crit hit a §f%s§d but reflected.§r", living.getName());
             else
                 IlsMod.info(source, "§dYou hit a §f%s§d but reflected.§r", living.getName());
-            double health = source.getHealth() * this.health / source.getMaxHealth();
+            double health = source.getHealth();
             health -= damage;
             if (health < 0)
                 health = 0;
-            health = health * source.getMaxHealth() / this.health;
             source.setHealth((float) health);
             damage = 0;
         } else if (stats.block.occurred()) {
@@ -251,7 +242,6 @@ public final class Stats {
             else
                 IlsMod.info(source, "§dYou hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), damage);
         }
-        damage = damage * living.getMaxHealth() / stats.health;
         event.setAmount((float) damage);
         if (this.blind.occurred())
             living.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 60, IlsConfig.blindLevel, true, true));
