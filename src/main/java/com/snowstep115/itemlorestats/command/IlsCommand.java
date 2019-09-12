@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import com.snowstep115.itemlorestats.IlsMod;
 import com.snowstep115.itemlorestats.config.IlsConfig;
 import com.snowstep115.itemlorestats.lore.ArmourLore;
+import com.snowstep115.itemlorestats.lore.BlindLore;
 import com.snowstep115.itemlorestats.lore.BlockLore;
 import com.snowstep115.itemlorestats.lore.CritChanceLore;
 import com.snowstep115.itemlorestats.lore.CritDamageLore;
@@ -61,7 +62,7 @@ public final class IlsCommand extends CommandBase {
         case "createlore":
             addLoreItem(mp, Items.IRON_SWORD, new DamageLore(), new CritChanceLore(), new CritDamageLore(),
                     new LifeStealLore(), new IgnitionLore(), new SlowLore(), new PoisonLore(), new WitherLore(),
-                    new HarmingLore());
+                    new HarmingLore(), new BlindLore());
             addLoreItem(mp, Items.LEATHER_HELMET, new ArmourLore(), new BlockLore(), new DodgeLore(), new HealthLore(),
                     new HealthRegenLore());
             addLoreItem(mp, Items.LEATHER_CHESTPLATE, new ArmourLore(), new BlockLore(), new DodgeLore(),
@@ -128,6 +129,7 @@ public final class IlsCommand extends CommandBase {
             IlsMod.info(mp, "%s: %s", new PoisonLore().getStatsName(), stats.poison);
             IlsMod.info(mp, "%s: %s", new WitherLore().getStatsName(), stats.wither);
             IlsMod.info(mp, "%s: %s", new HarmingLore().getStatsName(), stats.harming);
+            IlsMod.info(mp, "%s: %s", new BlindLore().getStatsName(), stats.blind);
             IlsMod.info(mp, "%s: %.2f%%", new SpeedLore().getStatsName(), stats.speed);
             break;
         }

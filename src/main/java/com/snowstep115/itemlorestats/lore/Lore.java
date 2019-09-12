@@ -79,6 +79,8 @@ public abstract class Lore {
                 switch (key) {
                 case "text.armourlore.name":
                     return new ArmourLore(comps[1]);
+                case "text.blindlore.name":
+                    return new BlindLore(comps[1]);
                 case "text.blocklore.name":
                     return new BlockLore(comps[1]);
                 case "text.critchancelore.name":

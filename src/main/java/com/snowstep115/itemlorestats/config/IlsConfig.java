@@ -17,6 +17,10 @@ public class IlsConfig {
     @RangeDouble(min = 0, max = 1000)
     public static double baseCriticalDamage = 150;
 
+    @LangKey("config.itemlorestats.blind_level.name")
+    @RangeInt(min = 1, max = 31)
+    public static int blindLevel = 3;
+
     @LangKey("config.itemlorestats.block_slow_level.name")
     @RangeInt(min = 1, max = 31)
     public static int blockSlowLevel = 3;

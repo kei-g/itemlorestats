@@ -1,6 +1,7 @@
 itemGroup.itemlorestats=Item Lore Stats
 
 text.armourlore.name=防御力
+text.blindlore.name=致盲攻击
 text.blocklore.name=格挡
 text.critchancelore.name=暴击几率
 text.critdamagelore.name=暴击伤害
@@ -19,6 +20,7 @@ text.poisonlore.name=中毒
 text.witherlore.name=凋零攻击
 
 config.itemlorestats.base_critical_damage.name=Base Crit Damage(%%)
+config.itemlorestats.blind_level.name=Effective Blind Level
 config.itemlorestats.block_slow_level.name=Effective Slow Level on Block
 config.itemlorestats.harming_level.name=Effective Harming Level
 config.itemlorestats.life_steal.name=Life Steal(%%)

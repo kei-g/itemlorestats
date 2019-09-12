@@ -12,6 +12,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
 public final class Stats {
+    public final Probabilistic blind = new Probabilistic();
     public final Probabilistic block = new Probabilistic();
     public final Probabilistic critical = new Probabilistic();
     public double criticalDamage = IlsConfig.baseCriticalDamage;
@@ -106,6 +107,8 @@ public final class Stats {
         }
         damage = damage * living.getMaxHealth() / stats.health;
         event.setAmount((float) damage);
+        if (this.blind.occurred())
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 60, IlsConfig.blindLevel, true, true));
         if (this.harming.occurred())
             living.addPotionEffect(new PotionEffect(Potion.getPotionById(7), 60, IlsConfig.harmingLevel, true, true));
         if (this.ignition.occurred())
@@ -169,6 +172,8 @@ public final class Stats {
         }
         damage = damage * living.getMaxHealth() / stats.health;
         event.setAmount((float) damage);
+        if (this.blind.occurred())
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 60, IlsConfig.blindLevel, true, true));
         if (this.harming.occurred())
             living.addPotionEffect(new PotionEffect(Potion.getPotionById(7), 60, IlsConfig.harmingLevel, true, true));
         if (this.ignition.occurred())
