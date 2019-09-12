@@ -6,12 +6,12 @@ public final class PoisonLore extends Lore {
     private final double possibility;
 
     public PoisonLore() {
-        super("text.poinsonlore.name");
+        super("text.poisonlore.name");
         this.possibility = IlsMod.SEED.nextDouble() * 5;
     }
 
     public PoisonLore(String value) {
-        super("text.poinsonlore.name");
+        super("text.poisonlore.name");
         int index = value.lastIndexOf('%');
         if (index < 0)
             throw new IllegalArgumentException();
