@@ -18,6 +18,8 @@ import com.snowstep115.itemlorestats.lore.IgnitionLore;
 import com.snowstep115.itemlorestats.lore.LifeStealLore;
 import com.snowstep115.itemlorestats.lore.Lore;
 import com.snowstep115.itemlorestats.lore.PoisonLore;
+import com.snowstep115.itemlorestats.lore.PvEDamageLore;
+import com.snowstep115.itemlorestats.lore.PvPDamageLore;
 import com.snowstep115.itemlorestats.lore.ReflectLore;
 import com.snowstep115.itemlorestats.lore.SlowLore;
 import com.snowstep115.itemlorestats.lore.SpeedLore;
@@ -63,7 +65,7 @@ public final class IlsCommand extends CommandBase {
         case "createlore":
             addLoreItem(mp, Items.IRON_SWORD, new DamageLore(), new CritChanceLore(), new CritDamageLore(),
                     new LifeStealLore(), new IgnitionLore(), new SlowLore(), new PoisonLore(), new WitherLore(),
-                    new HarmingLore(), new BlindLore(), new XpBonusLore());
+                    new HarmingLore(), new BlindLore(), new XpBonusLore(), new PvEDamageLore(), new PvPDamageLore());
             addLoreItem(mp, Items.LEATHER_HELMET, new ArmourLore(), new BlockLore(), new DodgeLore(), new HealthLore(),
                     new HealthRegenLore(), new XpBonusLore());
             addLoreItem(mp, Items.LEATHER_CHESTPLATE, new ArmourLore(), new BlockLore(), new DodgeLore(),
@@ -133,6 +135,8 @@ public final class IlsCommand extends CommandBase {
             IlsMod.info(mp, "%s: %s", new BlindLore().getStatsName(), stats.blind);
             IlsMod.info(mp, "%s: %.2f%%", new SpeedLore().getStatsName(), stats.speed);
             IlsMod.info(mp, "%s: %.2f%%", new XpBonusLore().getStatsName(), stats.xpBonus);
+            IlsMod.info(mp, "%s: %.2f", new PvEDamageLore().getStatsName(), stats.damagePvE);
+            IlsMod.info(mp, "%s: %.2f", new PvPDamageLore().getStatsName(), stats.damagePvP);
             break;
         }
     }

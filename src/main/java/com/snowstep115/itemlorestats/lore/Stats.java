@@ -19,6 +19,8 @@ public final class Stats {
     public double damage;
     public double damageMax;
     public double damageMin;
+    public double damagePvE;
+    public double damagePvP;
     public final Probabilistic dodge = new Probabilistic();
     public final Probabilistic harming = new Probabilistic();
     public double health;
@@ -59,7 +61,7 @@ public final class Stats {
 
     public void apply(EntityPlayer source, EntityLivingBase living, LivingDamageEvent event) {
         Stats stats = new Stats(living);
-        double damage = event.getAmount() + this.damage;
+        double damage = event.getAmount() + this.damage + this.damagePvE;
         if (this.critical.occurred())
             damage *= this.criticalDamage / 100;
         damage -= damage * stats.reduction / 100;
@@ -124,7 +126,7 @@ public final class Stats {
 
     public void apply(EntityLivingBase source, EntityPlayer living, LivingDamageEvent event) {
         Stats stats = new Stats(living);
-        double damage = event.getAmount() + this.damage;
+        double damage = event.getAmount() + this.damage + this.damagePvP;
         if (this.critical.occurred())
             damage *= this.criticalDamage / 100;
         damage -= damage * stats.reduction / 100;
@@ -189,5 +191,51 @@ public final class Stats {
 
     public void apply(EntityPlayer source, EntityPlayer living, LivingDamageEvent event) {
         // XXX: NOTE - Dodge and LifeSteal have no effect at PvP.
+        Stats stats = new Stats(living);
+        double damage = event.getAmount() + this.damage + this.damagePvP;
+        if (this.critical.occurred())
+            damage *= this.criticalDamage / 100;
+        damage -= damage * stats.reduction / 100;
+        if (damage < 0)
+            damage = 0;
+        if (stats.reflection.occurred()) {
+            if (this.critical.occurred())
+                IlsMod.info(source, "§dYou crit hit a §f%s§d but reflected.§r", living.getName());
+            else
+                IlsMod.info(source, "§dYou hit a §f%s§d but reflected.§r", living.getName());
+            double health = source.getHealth() * this.health / source.getMaxHealth();
+            health -= damage;
+            if (health < 0)
+                health = 0;
+            health = health * source.getMaxHealth() / this.health;
+            source.setHealth((float) health);
+            damage = 0;
+        } else if (stats.block.occurred()) {
+            if (this.critical.occurred())
+                IlsMod.info(source, "§dYou crit hit a §f%s§d but blocked.§r", living.getName());
+            else
+                IlsMod.info(source, "§dYou hit a §f%s§d but blocked.§r", living.getName());
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 60, IlsConfig.blockSlowLevel, true, true));
+            damage = 0;
+        } else {
+            if (this.critical.occurred())
+                IlsMod.info(source, "§dYou crit hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), damage);
+            else
+                IlsMod.info(source, "§dYou hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), damage);
+        }
+        damage = damage * living.getMaxHealth() / stats.health;
+        event.setAmount((float) damage);
+        if (this.blind.occurred())
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 60, IlsConfig.blindLevel, true, true));
+        if (this.harming.occurred())
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(7), 60, IlsConfig.harmingLevel, true, true));
+        if (this.ignition.occurred())
+            living.setFire(3);
+        if (this.slowness.occurred())
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 60, IlsConfig.slowLevel, true, true));
+        if (this.poison.occurred())
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(19), 60, IlsConfig.poisonLevel, true, true));
+        if (this.wither.occurred())
+            living.addPotionEffect(new PotionEffect(Potion.getPotionById(20), 60, IlsConfig.witherLevel, true, true));
     }
 }

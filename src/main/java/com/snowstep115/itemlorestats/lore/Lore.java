@@ -103,6 +103,10 @@ public abstract class Lore {
                     return new LifeStealLore(comps[1]);
                 case "text.poisonlore.name":
                     return new PoisonLore(comps[1]);
+                case "text.pvedamagelore.name":
+                    return new PvEDamageLore(comps[1]);
+                case "text.pvpdamagelore.name":
+                    return new PvPDamageLore(comps[1]);
                 case "text.reflectlore.name":
                     return new ReflectLore(comps[1]);
                 case "text.slowlore.name":
