@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import com.snowstep115.itemlorestats.command.IlsCommand;
 import com.snowstep115.itemlorestats.lang.ThrowableRunnable;
 import com.snowstep115.itemlorestats.lang.ThrowableSupplier;
+import com.snowstep115.itemlorestats.network.PreventWearingMessage;
 import com.snowstep115.itemlorestats.proxy.CommonProxy;
 
 import org.apache.logging.log4j.LogManager;
@@ -27,6 +28,10 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid = IlsMod.MODID, name = IlsMod.NAME, version = IlsMod.VERSION)
 public final class IlsMod {
@@ -84,7 +89,12 @@ public final class IlsMod {
         IlsMod.info("%s", sw.toString());
     }
 
+    public static void sendTo(EntityPlayerMP mp, IMessage message) {
+        IlsMod.INSTANCE.wrapper.sendTo(message, mp);
+    }
+
     private MinecraftServer server;
+    private SimpleNetworkWrapper wrapper;
 
     public EntityPlayerMP getPlayerByUsername(String username) {
         return this.server.getPlayerList().getPlayerByUsername(username);
@@ -98,6 +108,9 @@ public final class IlsMod {
     @EventHandler
     public void init(final FMLInitializationEvent event) {
         PROXY.init(event);
+        this.wrapper = NetworkRegistry.INSTANCE.newSimpleChannel(IlsMod.MODID);
+        int disc = 0;
+        this.wrapper.registerMessage(PreventWearingMessage.class, PreventWearingMessage.class, disc++, Side.CLIENT);
     }
 
     @EventHandler

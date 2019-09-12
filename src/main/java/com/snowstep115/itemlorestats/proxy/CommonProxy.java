@@ -7,6 +7,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.snowstep115.itemlorestats.IlsMod;
 import com.snowstep115.itemlorestats.lore.Stats;
+import com.snowstep115.itemlorestats.network.PreventWearingMessage;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,6 +16,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -91,17 +93,20 @@ public abstract class CommonProxy {
         if (living.world.isRemote)
             return;
         IlsMod.info("equipmentchangeevent: %s %s -> %s", living.getName(), event.getFrom(), event.getTo());
+        IlsMod.info(living, "type=%s, index=%d, slotIndex=%d", event.getSlot().getSlotType(),
+                event.getSlot().getIndex(), event.getSlot().getSlotIndex());
         Stats stats = new Stats(living);
-        if (living instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) living;
+        if (living instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) living;
             if (stats.level.containsKey(event.getTo()) && player.experienceLevel < stats.level.get(event.getTo())) {
                 IlsMod.info(living, "§dRequires %d level§r", stats.level.get(event.getTo()));
-                // XXX: TODO - Prevent wearing/holding this item.
+                event.getSlot().getSlotType();
+                IlsMod.sendTo(player, new PreventWearingMessage(event.getTo(), event.getSlot()));
             }
             if (stats.soulbound.containsKey(event.getTo())
                     && !player.getName().equals(stats.soulbound.get(event.getTo()))) {
                 IlsMod.info(living, "§dBound to §r%s", stats.soulbound.get(event.getTo()));
-                // XXX: TODO - Prevent wearing/holding this item.
+                IlsMod.sendTo(player, new PreventWearingMessage(event.getTo(), event.getSlot()));
             }
         }
         AbstractAttributeMap attr = living.getAttributeMap();
