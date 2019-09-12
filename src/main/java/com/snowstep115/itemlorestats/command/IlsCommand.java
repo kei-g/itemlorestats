@@ -58,8 +58,15 @@ public final class IlsCommand extends CommandBase {
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         EntityPlayerMP mp = (EntityPlayerMP) sender;
-        if (args.length < 1)
+        if (args.length < 1) {
+            IlsMod.info(mp, "/ils createlore");
+            IlsMod.info(mp, "    Creates a set of lore weapon/armour.");
+            IlsMod.info(mp, "/ils lore <player_name> <lore> <value>");
+            IlsMod.info(mp, "    Adds a lore to the item on player's main hand.");
+            IlsMod.info(mp, "/ils stats");
+            IlsMod.info(mp, "    Shows your stats.");
             return;
+        }
         String subcommand = args[0];
         switch (subcommand) {
         case "createlore":
@@ -79,9 +86,9 @@ public final class IlsCommand extends CommandBase {
             if (args.length < 2)
                 IlsMod.info(mp, "<player_name> is not specified.");
             else if (args.length < 3)
-                IlsMod.info(mp, "<line#> is not specified.");
+                IlsMod.info(mp, "<lore> is not specified.");
             else if (args.length < 4)
-                IlsMod.info(mp, "<text> is not specified.");
+                IlsMod.info(mp, "<value> is not specified.");
             else {
                 EntityPlayerMP mp2 = IlsMod.INSTANCE.getPlayerByUsername(args[1]);
                 if (mp2 == null) {
@@ -137,6 +144,9 @@ public final class IlsCommand extends CommandBase {
             IlsMod.info(mp, "%s: %.2f%%", new XpBonusLore().getStatsName(), stats.xpBonus);
             IlsMod.info(mp, "%s: %.2f", new PvEDamageLore().getStatsName(), stats.damagePvE);
             IlsMod.info(mp, "%s: %.2f", new PvPDamageLore().getStatsName(), stats.damagePvP);
+            break;
+        default:
+            IlsMod.info(mp, "Unknown subcommand, %s", subcommand);
             break;
         }
     }
