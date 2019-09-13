@@ -32,6 +32,9 @@ public class IlsConfig {
     @RangeDouble(min = 0, max = 100)
     public static double lifeSteal = 15;
 
+    @LangKey("config.itemlorestats.show_combatlog_on_actionbar.name")
+    public static boolean showCombatLogOnActionBar = false;
+
     @LangKey("config.itemlorestats.slow_level.name")
     @RangeInt(min = 1, max = 31)
     public static int slowLevel = 6;

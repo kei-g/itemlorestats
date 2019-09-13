@@ -29,6 +29,7 @@ config.itemlorestats.blind_level.name=Effective Blind Level
 config.itemlorestats.block_slow_level.name=Effective Slow Level on Block
 config.itemlorestats.harming_level.name=Effective Harming Level
 config.itemlorestats.life_steal.name=Life Steal(%%)
+config.itemlorestats.show_combatlog_on_actionbar.name=Show CombatLog on ActionBar
 config.itemlorestats.slow_level.name=Effective Slow Level
 config.itemlorestats.poison_level.name=Effective Poison Level
 config.itemlorestats.wither_level.name=Effective Wither Level

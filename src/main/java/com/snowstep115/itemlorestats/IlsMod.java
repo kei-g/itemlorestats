@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 import com.snowstep115.itemlorestats.command.IlsCommand;
+import com.snowstep115.itemlorestats.config.IlsConfig;
 import com.snowstep115.itemlorestats.lang.ThrowableRunnable;
 import com.snowstep115.itemlorestats.lang.ThrowableSupplier;
 import com.snowstep115.itemlorestats.network.PreventWearingMessage;
@@ -50,6 +51,14 @@ public final class IlsMod {
     public static final String MODID = "itemlorestats";
     public static final String NAME = "Item Lore Stats";
     public static final String VERSION = "HEAD";
+
+    public static void combatlog(Entity entity, String format, Object... args) {
+        if (entity instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) entity;
+            String message = String.format(format, args);
+            player.sendStatusMessage(new TextComponentString(message), IlsConfig.showCombatLogOnActionBar);
+        }
+    }
 
     public static <T> T execute(ThrowableSupplier<T> task, Supplier<T> alternate) {
         try {

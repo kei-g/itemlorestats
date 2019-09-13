@@ -95,9 +95,9 @@ public final class Stats {
             damage = 0;
         if (stats.reflection.occurred()) {
             if (this.critical.occurred())
-                IlsMod.info(source, "§dYou crit hit a §f%s§d but reflected.§r", living.getName());
+                IlsMod.combatlog(source, "§dYou crit hit a §f%s§d but reflected.§r", living.getName());
             else
-                IlsMod.info(source, "§dYou hit a §f%s§d but reflected.§r", living.getName());
+                IlsMod.combatlog(source, "§dYou hit a §f%s§d but reflected.§r", living.getName());
             double health = source.getHealth();
             health -= damage;
             if (health < 0)
@@ -106,25 +106,25 @@ public final class Stats {
             damage = 0;
         } else if (stats.dodge.occurred()) {
             if (this.critical.occurred())
-                IlsMod.info(source, "§dYou crit hit a §f%s§d but dodged.§r", living.getName());
+                IlsMod.combatlog(source, "§dYou crit hit a §f%s§d but dodged.§r", living.getName());
             else
-                IlsMod.info(source, "§dYou hit a §f%s§d but dodged.§r", living.getName());
+                IlsMod.combatlog(source, "§dYou hit a §f%s§d but dodged.§r", living.getName());
             damage = 0;
         } else if (stats.block.occurred()) {
             if (this.critical.occurred())
-                IlsMod.info(source, "§dYou crit hit a §f%s§d but blocked.§r", living.getName());
+                IlsMod.combatlog(source, "§dYou crit hit a §f%s§d but blocked.§r", living.getName());
             else
-                IlsMod.info(source, "§dYou hit a §f%s§d but blocked.§r", living.getName());
+                IlsMod.combatlog(source, "§dYou hit a §f%s§d but blocked.§r", living.getName());
             living.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 60, IlsConfig.blockSlowLevel, true, true));
             damage = 0;
         } else {
             if (this.critical.occurred())
-                IlsMod.info(source, "§dYou crit hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), damage);
+                IlsMod.combatlog(source, "§dYou crit hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), damage);
             else
-                IlsMod.info(source, "§dYou hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), damage);
+                IlsMod.combatlog(source, "§dYou hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), damage);
             if (this.lifeSteal.occurred()) {
                 double stolen = damage * IlsConfig.lifeSteal / 100;
-                IlsMod.info(source, "§dYou stole §6%.2f §dhealth.§r", stolen);
+                IlsMod.combatlog(source, "§dYou stole §6%.2f §dhealth.§r", stolen);
                 double health = source.getHealth();
                 health += stolen;
                 if (source.getMaxHealth() < health)
@@ -157,9 +157,9 @@ public final class Stats {
             damage = 0;
         if (stats.reflection.occurred()) {
             if (this.critical.occurred())
-                IlsMod.info(living, "%s §dcrit hit you, but you reflected.§r", source.getName());
+                IlsMod.combatlog(living, "%s §dcrit hit you, but you reflected.§r", source.getName());
             else
-                IlsMod.info(living, "%s §dhit you, but you reflected.§r", source.getName());
+                IlsMod.combatlog(living, "%s §dhit you, but you reflected.§r", source.getName());
             double health = source.getHealth();
             health -= damage;
             if (health < 0)
@@ -168,25 +168,25 @@ public final class Stats {
             damage = 0;
         } else if (stats.dodge.occurred()) {
             if (this.critical.occurred())
-                IlsMod.info(living, "%s §dcrit hit you, but you dodged.§r", source.getName());
+                IlsMod.combatlog(living, "%s §dcrit hit you, but you dodged.§r", source.getName());
             else
-                IlsMod.info(living, "%s §dhit you, but you dodged.§r", source.getName());
+                IlsMod.combatlog(living, "%s §dhit you, but you dodged.§r", source.getName());
             damage = 0;
         } else if (stats.block.occurred()) {
             if (this.critical.occurred())
-                IlsMod.info(living, "%s §dcrit hit you, but you blocked.§r", source.getName());
+                IlsMod.combatlog(living, "%s §dcrit hit you, but you blocked.§r", source.getName());
             else
-                IlsMod.info(living, "%s §dhit you, but you blocked.§r", source.getName());
+                IlsMod.combatlog(living, "%s §dhit you, but you blocked.§r", source.getName());
             living.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 30, IlsConfig.blockSlowLevel, true, true));
             damage = 0;
         } else {
             if (this.critical.occurred())
-                IlsMod.info(living, "%s §dcrit hit you for §6%.2f §ddamage.§r", source.getName(), damage);
+                IlsMod.combatlog(living, "%s §dcrit hit you for §6%.2f §ddamage.§r", source.getName(), damage);
             else
-                IlsMod.info(living, "%s §dhit you for §6%.2f §ddamage.§r", source.getName(), damage);
+                IlsMod.combatlog(living, "%s §dhit you for §6%.2f §ddamage.§r", source.getName(), damage);
             if (this.lifeSteal.occurred()) {
                 double stolen = damage * IlsConfig.lifeSteal / 100;
-                IlsMod.info(source, "§d%s stole §6%.2f §dhealth.§r", source.getName(), stolen);
+                IlsMod.combatlog(source, "§d%s stole §6%.2f §dhealth.§r", source.getName(), stolen);
                 double health = source.getHealth();
                 health += stolen;
                 if (source.getMaxHealth() < health)
@@ -220,9 +220,9 @@ public final class Stats {
             damage = 0;
         if (stats.reflection.occurred()) {
             if (this.critical.occurred())
-                IlsMod.info(source, "§dYou crit hit a §f%s§d but reflected.§r", living.getName());
+                IlsMod.combatlog(source, "§dYou crit hit a §f%s§d but reflected.§r", living.getName());
             else
-                IlsMod.info(source, "§dYou hit a §f%s§d but reflected.§r", living.getName());
+                IlsMod.combatlog(source, "§dYou hit a §f%s§d but reflected.§r", living.getName());
             double health = source.getHealth();
             health -= damage;
             if (health < 0)
@@ -231,16 +231,16 @@ public final class Stats {
             damage = 0;
         } else if (stats.block.occurred()) {
             if (this.critical.occurred())
-                IlsMod.info(source, "§dYou crit hit a §f%s§d but blocked.§r", living.getName());
+                IlsMod.combatlog(source, "§dYou crit hit a §f%s§d but blocked.§r", living.getName());
             else
-                IlsMod.info(source, "§dYou hit a §f%s§d but blocked.§r", living.getName());
+                IlsMod.combatlog(source, "§dYou hit a §f%s§d but blocked.§r", living.getName());
             living.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 60, IlsConfig.blockSlowLevel, true, true));
             damage = 0;
         } else {
             if (this.critical.occurred())
-                IlsMod.info(source, "§dYou crit hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), damage);
+                IlsMod.combatlog(source, "§dYou crit hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), damage);
             else
-                IlsMod.info(source, "§dYou hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), damage);
+                IlsMod.combatlog(source, "§dYou hit a §f%s §dfor §6%.2f §ddamage.§r", living.getName(), damage);
         }
         event.setAmount((float) damage);
         if (this.blind.occurred())
