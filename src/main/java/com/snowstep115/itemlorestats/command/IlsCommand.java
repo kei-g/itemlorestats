@@ -60,11 +60,13 @@ public final class IlsCommand extends CommandBase {
         EntityPlayerMP mp = (EntityPlayerMP) sender;
         if (args.length < 1) {
             IlsMod.info(mp, "/ils createlore");
-            IlsMod.info(mp, "    Creates a set of lore weapon/armour.");
+            IlsMod.info(mp, "    Creates a set of gear with lore to test the plugin.");
             IlsMod.info(mp, "/ils lore <player_name> <lore> <value>");
-            IlsMod.info(mp, "    Adds a lore to the item on player's main hand.");
+            IlsMod.info(mp, "    Adds or sets the lore line to the item currently in the players main hand. <player_name> must be online.");
+            IlsMod.info(mp, "/ils name <name>");
+            IlsMod.info(mp, "    Sets the name of the item currently in your main hand. Supports all text formatting.");
             IlsMod.info(mp, "/ils stats");
-            IlsMod.info(mp, "    Shows your stats.");
+            IlsMod.info(mp, "    Will display the total stats of your armour and item in your hand.");
             return;
         }
         String subcommand = args[0];
@@ -118,6 +120,20 @@ public final class IlsCommand extends CommandBase {
                 Consumer<Lore> add = Lore.addDisplayLore(equip);
                 add.accept(lore);
                 IlsMod.info(mp2, "You are given %s lore by %s.", value, mp.getName());
+            }
+            break;
+        case "name":
+            if (args.length < 2)
+                IlsMod.info(mp, "<name> is not specified");
+            else {
+                ItemStack itemstack = mp.getHeldItemMainhand();
+                if (itemstack.isEmpty())
+                    return;
+                String[] comps = new String[args.length - 1];
+                for (int i = 0; i < args.length - 1; i++)
+                    comps[i] = args[1 + i];
+                String name = String.join(" ", comps);
+                itemstack.setStackDisplayName(name);
             }
             break;
         case "stats":
