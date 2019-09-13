@@ -72,9 +72,9 @@ public final class PreventWearingMessage
 
     private void prevent(EntityPlayer player, NonNullList<ItemStack> inventory) {
         ItemStack itemstack = this.itemstackFrom;
-        inventory.set(this.slotIndex, ItemStack.EMPTY);
-        if (!itemstack.isEmpty())
-            player.inventory.addItemStackToInventory(itemstack);
+        if (inventory.size() <= this.slotIndex)
+            this.slotIndex = inventory.size() - 1;
+        inventory.set(this.slotIndex, itemstack);
         player.inventory.setItemStack(this.itemstackTo);
     }
 
