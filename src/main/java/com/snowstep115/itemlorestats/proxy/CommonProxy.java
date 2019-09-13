@@ -18,9 +18,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -101,12 +99,10 @@ public abstract class CommonProxy {
         if (living instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) living;
             ItemStack equip = event.getTo();
-            EnumHand hand = event.getSlot().equals(EntityEquipmentSlot.MAINHAND) ? EnumHand.MAIN_HAND
-                    : EnumHand.OFF_HAND;
             if (stats.level.containsKey(equip) && player.experienceLevel < stats.level.get(equip))
-                IlsMod.sendTo(player, new PreventWearingMessage(hand, equip, event.getSlot()));
+                IlsMod.sendTo(player, new PreventWearingMessage(event));
             else if (stats.soulbound.containsKey(equip) && !player.getName().equals(stats.soulbound.get(equip)))
-                IlsMod.sendTo(player, new PreventWearingMessage(hand, equip, event.getSlot()));
+                IlsMod.sendTo(player, new PreventWearingMessage(event));
         }
         Stats actualStats = new Stats(living, stats);
         AbstractAttributeMap attr = living.getAttributeMap();
