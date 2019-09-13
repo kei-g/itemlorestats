@@ -108,9 +108,9 @@ public abstract class CommonProxy {
         AbstractAttributeMap attr = living.getAttributeMap();
         IAttributeInstance maxHealth = attr.getAttributeInstanceByName("generic.maxHealth");
         Multimap<String, AttributeModifier> modifiers = ArrayListMultimap.create();
-        modifiers.put("generic.maxHealth",
-                new AttributeModifier(UUID.fromString("5D6F0BA2-1186-46AC-B896-C61C5CEE99CC"), "generic.maxHealth",
-                        actualStats.health - (maxHealth == null ? 20 : maxHealth.getAttributeValue()), 0));
+        modifiers.put("generic.maxHealth", new AttributeModifier(
+                UUID.fromString("5D6F0BA2-1186-46AC-B896-C61C5CEE99CC"), "generic.maxHealth",
+                actualStats.health - (maxHealth == null ? living.getMaxHealth() : maxHealth.getAttributeValue()), 0));
         modifiers.put("generic.movementSpeed",
                 new AttributeModifier(UUID.fromString("91AEAA56-376B-4498-935B-2F7F68070635"), "generic.movementSpeed",
                         actualStats.speed / 100, 2));
