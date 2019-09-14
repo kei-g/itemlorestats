@@ -7,7 +7,11 @@ public final class CritDamageLore extends Lore {
 
     public CritDamageLore() {
         super("text.critdamagelore.name");
-        this.value = IlsMod.SEED.nextGaussian() * 5;
+        double value;
+        do {
+            value = IlsMod.SEED.nextGaussian() * 20;
+        } while (value < 0);
+        this.value = value;
     }
 
     public CritDamageLore(String value) {

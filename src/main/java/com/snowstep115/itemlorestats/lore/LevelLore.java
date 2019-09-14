@@ -20,7 +20,8 @@ public final class LevelLore extends Lore {
 
     @Override
     public void applyTo(Stats stats) {
-        stats.level.put(this.itemstack, this.value);
+        if (!this.itemstack.isEmpty())
+            stats.level.put(this.itemstack, this.value);
     }
 
     @Override

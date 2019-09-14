@@ -20,7 +20,8 @@ public final class BoundToLore extends Lore {
 
     @Override
     public void applyTo(Stats stats) {
-        stats.soulbound.put(this.itemstack, this.username);
+        if (!this.itemstack.isEmpty() && this.username != null)
+            stats.soulbound.put(this.itemstack, this.username);
     }
 
     @Override

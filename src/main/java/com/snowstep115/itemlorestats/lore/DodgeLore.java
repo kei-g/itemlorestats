@@ -1,30 +1,16 @@
 package com.snowstep115.itemlorestats.lore;
 
-import com.snowstep115.itemlorestats.IlsMod;
-
-public final class DodgeLore extends Lore {
-    public double possibility;
-
+public final class DodgeLore extends AbsractPossibilityLore {
     public DodgeLore() {
         super("text.dodgelore.name");
-        this.possibility = 10d + IlsMod.SEED.nextGaussian() * 10d;
     }
 
     public DodgeLore(String value) {
-        super("text.dodgelore.name");
-        int index = value.lastIndexOf('%');
-        if (index < 0)
-            throw new IllegalArgumentException();
-        this.possibility = Double.parseDouble(value.substring(0, index));
+        super("text.dodgelore.name", value);
     }
 
     @Override
     public void applyTo(Stats stats) {
         stats.dodge.increase(this.possibility);
-    }
-
-    @Override
-    public String getFormattedString() {
-        return String.format(this.possibility <= 0 ? "%s %.2f%%" : "%s +%.2f%%", getLocalizedName(), this.possibility);
     }
 }

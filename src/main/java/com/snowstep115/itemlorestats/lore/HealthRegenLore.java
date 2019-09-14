@@ -7,7 +7,11 @@ public final class HealthRegenLore extends Lore {
 
     public HealthRegenLore() {
         super("text.healthregenlore.name");
-        this.value = IlsMod.SEED.nextGaussian() * 5d;
+        double value;
+        do {
+            value = IlsMod.SEED.nextGaussian() * 5;
+        } while (value < 0);
+        this.value = value;
     }
 
     public HealthRegenLore(String value) {
