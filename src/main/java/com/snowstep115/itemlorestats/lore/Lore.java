@@ -1,5 +1,7 @@
 package com.snowstep115.itemlorestats.lore;
 
+import java.lang.reflect.Method;
+import java.util.List;
 import java.util.function.Consumer;
 
 import com.snowstep115.itemlorestats.util.I18n;
@@ -7,6 +9,7 @@ import com.snowstep115.itemlorestats.util.ResourceUtil;
 import com.snowstep115.itemlorestats.util.StringUtil;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -27,7 +30,8 @@ public abstract class Lore {
         return lore -> list.appendTag(new NBTTagString(lore.getFormattedString()));
     }
 
-    public static void deserialize(EntityLivingBase living, ItemStack itemstack, NBTTagList list, Consumer<Lore> consumer) {
+    public static void deserialize(EntityLivingBase living, ItemStack itemstack, NBTTagList list,
+            Consumer<Lore> consumer) {
         for (int i = 0; i < list.tagCount(); i++) {
             String description = list.getStringTagAt(i);
             Lore lore = Lore.parse(living, itemstack, description);
@@ -37,7 +41,8 @@ public abstract class Lore {
         }
     }
 
-    public static void deserialize(EntityLivingBase living, ItemStack itemstack, NBTTagCompound tag, Consumer<Lore> consumer) {
+    public static void deserialize(EntityLivingBase living, ItemStack itemstack, NBTTagCompound tag,
+            Consumer<Lore> consumer) {
         if (tag == null)
             return;
         if (!tag.hasKey("display"))
@@ -49,9 +54,22 @@ public abstract class Lore {
         Lore.deserialize(living, itemstack, lore, consumer);
     }
 
+    @SuppressWarnings("unchecked")
     public static void deserialize(EntityLivingBase living, ItemStack itemstack, Consumer<Lore> consumer) {
         NBTTagCompound tag = itemstack.getTagCompound();
         Lore.deserialize(living, itemstack, tag, consumer);
+        try {
+            Item item = itemstack.getItem();
+            Method method = item.getClass().getMethod("getTooltip");
+            List<String> tooltip = (List<String>) method.invoke(item);
+            for (String description : tooltip) {
+                Lore lore = parse(living, itemstack, description);
+                if (lore == null)
+                    continue;
+                consumer.accept(lore);
+            }
+        } catch (Throwable exception) {
+        }
     }
 
     public static void deserialize(EntityLivingBase living, Consumer<Lore> consumer) {
