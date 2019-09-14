@@ -44,7 +44,7 @@ public final class IlsCommand extends CommandBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "ils";
+        return "/ils Shows help.";
     }
 
     private static void addLoreItem(EntityPlayerMP entity, Item item, Lore... lores) {
