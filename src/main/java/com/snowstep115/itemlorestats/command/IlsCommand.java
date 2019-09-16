@@ -26,6 +26,7 @@ import com.snowstep115.itemlorestats.lore.SpeedLore;
 import com.snowstep115.itemlorestats.lore.Stats;
 import com.snowstep115.itemlorestats.lore.WitherLore;
 import com.snowstep115.itemlorestats.lore.XpBonusLore;
+import com.snowstep115.itemlorestats.util.CombatLog;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -35,6 +36,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.common.config.Config.Type;
 
 public final class IlsCommand extends CommandBase {
     @Override
@@ -59,6 +62,8 @@ public final class IlsCommand extends CommandBase {
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         EntityPlayerMP mp = (EntityPlayerMP) sender;
         if (args.length < 1) {
+            IlsMod.info(mp, "/ils combatlog <actionbar|chat|none>");
+            IlsMod.info(mp, "    Changes display position of combat logs.");
             IlsMod.info(mp, "/ils createlore");
             IlsMod.info(mp, "    Creates a set of gear with lore to test the plugin.");
             IlsMod.info(mp, "/ils lore <player_name> <lore> <value>");
@@ -71,6 +76,14 @@ public final class IlsCommand extends CommandBase {
         }
         String subcommand = args[0];
         switch (subcommand) {
+        case "combatlog":
+            if (args.length < 2)
+                IlsMod.info(mp, "<actionbar|char|none> is not specified.");
+            else {
+                IlsConfig.displayPositionOfCombatLog = CombatLog.valueOf(args[1]);
+                ConfigManager.sync(IlsMod.MODID, Type.INSTANCE);
+            }
+            break;
         case "createlore":
             addLoreItem(mp, Items.IRON_SWORD, new DamageLore(), new CritChanceLore(), new CritDamageLore(),
                     new LifeStealLore(), new IgnitionLore(), new SlowLore(), new PoisonLore(), new WitherLore(),
