@@ -1,5 +1,3 @@
-itemGroup.itemlorestats=Item Lore Stats
-
 text.armourlore.name=Armour
 text.blindlore.name=Blind
 text.blocklore.name=Block
@@ -33,3 +31,30 @@ config.itemlorestats.life_steal.name=Life Steal(%%)
 config.itemlorestats.slow_level.name=Effective Slow Level
 config.itemlorestats.poison_level.name=Effective Poison Level
 config.itemlorestats.wither_level.name=Effective Wither Level
+
+message.itemlorestats.pve.crit_hit_reflected=§dYou crit hit a §f%s§d but reflected.§r
+message.itemlorestats.pve.hit_reflected=§dYou hit a §f%s§d but reflected.§r
+message.itemlorestats.pve.crit_hit_dodged=§dYou crit hit a §f%s§d but dodged.§r
+message.itemlorestats.pve.hit_dodged=§dYou hit a §f%s§d but dodged.§r
+message.itemlorestats.pve.crit_hit_blocked=§dYou crit hit a §f%s§d but blocked.§r
+message.itemlorestats.pve.hit_blocked=§dYou hit a §f%s§d but blocked.§r
+message.itemlorestats.pve.crit_hit=§dYou crit hit a §f%s §dfor §6%.2f §ddamage.§r
+message.itemlorestats.pve.hit=§dYou hit a §f%s §dfor §6%.2f §ddamage.§r
+message.itemlorestats.pve.lifesteal=§dYou stole §6%.2f §dhealth.§r
+
+message.itemlorestats.evp.crit_hit_reflected=%s §dcrit hit you, but you reflected.§r
+message.itemlorestats.evp.hit_reflected=%s §dhit you, but you reflected.§r
+message.itemlorestats.evp.crit_hit_dodged=%s §dcrit hit you, but you dodged.§r
+message.itemlorestats.evp.hit_dodged=%s §dhit you, but you dodged.§r
+message.itemlorestats.evp.crit_hit_blocked=%s §dcrit hit you, but you blocked.§r
+message.itemlorestats.evp.hit_blocked=%s §dhit you, but you blocked.§r
+message.itemlorestats.evp.crit_hit=%s §dcrit hit you for §6%.2f §ddamage.§r
+message.itemlorestats.evp.hit=%s §dhit you for §6%.2f §ddamage.§r
+message.itemlorestats.evp.lifesteal=§d%s stole §6%.2f §dhealth.§r
+
+message.itemlorestats.pvp.crit_hit_reflected=§dYou crit hit §f%s§d but reflected.§r
+message.itemlorestats.pvp.hit_reflected=§dYou hit §f%s§d but reflected.§r
+message.itemlorestats.pvp.crit_hit_blocked=§dYou crit hit §f%s§d but blocked.§r
+message.itemlorestats.pvp.hit_blocked=§dYou hit §f%s§d but blocked.§r
+message.itemlorestats.pvp.crit_hit=§dYou crit hit §f%s §dfor §6%.2f §ddamage.§r
+message.itemlorestats.pvp.hit=§dYou hit §f%s §dfor §6%.2f §ddamage.§r

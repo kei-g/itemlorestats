@@ -16,6 +16,7 @@ import com.snowstep115.itemlorestats.util.CombatLog;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -58,7 +59,7 @@ public final class IlsMod {
             return;
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
-            String message = String.format(format, args);
+            String message = I18n.format(format, args);
             player.sendStatusMessage(new TextComponentString(message),
                     IlsConfig.displayPositionOfCombatLog == CombatLog.actionbar);
         }
