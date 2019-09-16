@@ -11,6 +11,7 @@ import com.snowstep115.itemlorestats.lang.ThrowableRunnable;
 import com.snowstep115.itemlorestats.lang.ThrowableSupplier;
 import com.snowstep115.itemlorestats.network.PreventWearingMessage;
 import com.snowstep115.itemlorestats.proxy.CommonProxy;
+import com.snowstep115.itemlorestats.util.CombatLog;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,10 +54,13 @@ public final class IlsMod {
     public static final String VERSION = "HEAD";
 
     public static void combatlog(Entity entity, String format, Object... args) {
+        if (IlsConfig.displayPositionOfCombatLog == CombatLog.none)
+            return;
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
             String message = String.format(format, args);
-            player.sendStatusMessage(new TextComponentString(message), IlsConfig.showCombatLogOnActionBar);
+            player.sendStatusMessage(new TextComponentString(message),
+                    IlsConfig.displayPositionOfCombatLog == CombatLog.actionbar);
         }
     }
 

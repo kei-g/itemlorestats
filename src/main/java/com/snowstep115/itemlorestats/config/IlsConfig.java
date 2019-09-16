@@ -1,6 +1,7 @@
 package com.snowstep115.itemlorestats.config;
 
 import com.snowstep115.itemlorestats.IlsMod;
+import com.snowstep115.itemlorestats.util.CombatLog;
 
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
@@ -25,15 +26,15 @@ public class IlsConfig {
     @RangeInt(min = 1, max = 31)
     public static int blockSlowLevel = 3;
 
+    @LangKey("config.itemlorestats.display_position_of_combatlog.name")
+    public static CombatLog displayPositionOfCombatLog = CombatLog.chat;
+
     @LangKey("config.itemlorestats.harming_level.name")
     public static int harmingLevel = 1;
 
     @LangKey("config.itemlorestats.life_steal.name")
     @RangeDouble(min = 0, max = 100)
     public static double lifeSteal = 15;
-
-    @LangKey("config.itemlorestats.show_combatlog_on_actionbar.name")
-    public static boolean showCombatLogOnActionBar = false;
 
     @LangKey("config.itemlorestats.slow_level.name")
     @RangeInt(min = 1, max = 31)
