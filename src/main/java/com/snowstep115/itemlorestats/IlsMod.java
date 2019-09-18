@@ -59,7 +59,14 @@ public final class IlsMod {
             return;
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
-            String message = I18n.format(format, args);
+            String localized = I18n.format(format);
+            do {
+                int index = localized.indexOf('$');
+                if (index < 0)
+                    break;
+                localized = localized.substring(0, index) + "%" + localized.substring(index + 1);
+            } while (true);
+            String message = String.format(localized, args);
             player.sendStatusMessage(new TextComponentString(message),
                     IlsConfig.displayPositionOfCombatLog == CombatLog.actionbar);
         }
